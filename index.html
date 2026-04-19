@@ -1,150 +1,240 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>OhDxnis</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OHDXNISL</title>
+    <style>
+        :root {
+            --bg-deep: #050505;
+            --blood: #4a0000;
+            --glitch-grey: #a1a1a1;
+            --flicker-speed: 0.1s;
+        }
 
-<style>
-body {
-  margin: 0;
-  height: 100vh;
-  background: #050505;
-  color: white;
-  font-family: Arial, sans-serif;
-  overflow: hidden;
-}
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: crosshair; }
 
-/* subtle moving grain */
-body::before {
-  content: "";
-  position: fixed;
-  width: 200%;
-  height: 200%;
-  top: -50%;
-  left: -50%;
-  background: url("https://www.transparenttextures.com/patterns/noise.png");
-  opacity: 0.06;
-  animation: grain 6s steps(10) infinite;
-  pointer-events: none;
-}
+        body, html {
+            background-color: var(--bg-deep);
+            color: var(--glitch-grey);
+            font-family: 'Courier New', Courier, monospace;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+        }
 
-@keyframes grain {
-  0% { transform: translate(0,0); }
-  100% { transform: translate(-5%,5%); }
-}
+        /* --- ATMOSPHERIC LAYERS --- */
+        
+        #vhs-grain {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: url('https://upload.wikimedia.org/wikipedia/commons/7/76/1k_Resolution_White_Noise_Video_Frame.png');
+            opacity: 0.04;
+            pointer-events: none;
+            z-index: 999;
+            animation: noise 0.2s infinite;
+        }
 
-/* center layout */
-.container {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%,-50%);
-  text-align: center;
-}
+        #overlay-tint {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: radial-gradient(circle, transparent 20%, rgba(0,0,0,0.8) 100%);
+            z-index: 998;
+            pointer-events: none;
+        }
 
-h1 {
-  font-size: 64px;
-  letter-spacing: 8px;
-  margin: 0;
-}
+        /* --- ANIMATED BACKGROUND --- */
+        
+        .ambience {
+            position: absolute;
+            width: 150%; height: 150%;
+            top: -25%; left: -25%;
+            background: radial-gradient(circle at center, var(--blood) 0%, transparent 50%);
+            filter: blur(80px);
+            opacity: 0.15;
+            animation: drift 20s infinite alternate ease-in-out;
+            z-index: 1;
+        }
 
-p {
-  opacity: 0.5;
-}
+        /* --- MAIN IDENTITY --- */
 
-/* links */
-a {
-  color: white;
-  text-decoration: none;
-  margin: 0 10px;
-  opacity: 0.6;
-}
+        .center-container {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+        }
 
-a:hover {
-  opacity: 1;
-}
+        h1 {
+            font-size: 8vw;
+            font-weight: 900;
+            color: #fff;
+            text-shadow: 2px 2px var(--blood), -2px -2px #00ffff55;
+            filter: url(#glitch);
+            animation: flicker 4s infinite;
+            user-select: none;
+        }
 
-/* cursor */
-#cursor {
-  position: fixed;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: white;
-  pointer-events: none;
-  transform: translate(-50%, -50%);
-}
+        .subtitle {
+            font-size: 0.8rem;
+            margin-top: 10px;
+            opacity: 0.6;
+            animation: wave 5s infinite;
+        }
 
-/* music button */
-#btn {
-  position: absolute;
-  bottom: 40px;
-  left: 50%;
-  transform: translateX(-50%);
-  border: 1px solid white;
-  padding: 10px 18px;
-  cursor: pointer;
-  opacity: 0.7;
-}
+        /* --- INTEGRATED MEDIA --- */
 
-#btn:hover {
-  opacity: 1;
-}
+        .media-shrine {
+            margin-top: 50px;
+            width: 300px;
+            filter: grayscale(1) contrast(1.5) invert(1);
+            opacity: 0.3;
+            transition: opacity 0.5s;
+        }
 
-/* soundcloud box */
-.sc {
-  margin-top: 20px;
-  opacity: 0.9;
-}
-</style>
+        .media-shrine:hover {
+            opacity: 0.8;
+            filter: grayscale(0.5) contrast(1.2) invert(0);
+        }
+
+        /* --- UI ELEMENTS --- */
+
+        .status-bar {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            font-size: 10px;
+            line-height: 1.5;
+            color: var(--blood);
+        }
+
+        .interaction-prompt {
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1000;
+            background: #000;
+            padding: 20px;
+            border: 1px solid var(--blood);
+            cursor: pointer;
+            text-align: center;
+        }
+
+        /* --- ANIMATIONS --- */
+
+        @keyframes noise {
+            0% { transform: translate(0,0) }
+            10% { transform: translate(-5%,-5%) }
+            20% { transform: translate(-10%,5%) }
+            50% { transform: translate(5%,-10%) }
+            100% { transform: translate(0,0) }
+        }
+
+        @keyframes drift {
+            from { transform: rotate(0deg) scale(1); }
+            to { transform: rotate(5deg) scale(1.1); }
+        }
+
+        @keyframes flicker {
+            0%, 19.999%, 22%, 62.999%, 64%, 64.999%, 70%, 100% { opacity: 0.99; }
+            20%, 21.999%, 63%, 63.999%, 65%, 69.999% { opacity: 0.4; }
+        }
+
+        @keyframes wave {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(10px); }
+        }
+
+        /* HIDDEN ELEMENTS */
+        .hidden { display: none !important; }
+
+    </style>
 </head>
-
 <body>
 
-<div id="cursor"></div>
+    <svg style="position: absolute; width: 0; height: 0;">
+        <filter id="glitch">
+            <feTurbulence type="fractalNoise" baseFrequency="0.01" numOctaves="3" result="noise" />
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="10" />
+        </filter>
+    </svg>
 
-<div class="container">
-  <h1>OHDXNIS</h1>
-  <p>First albanian to do it</p>
+    <div id="vhs-grain"></div>
+    <div id="overlay-tint"></div>
+    <div class="ambience" id="ambient-blob"></div>
 
-  <div>
-    <a href="https://www.instagram.com/denis.gjoka_/" target="_blank">instagram</a>
-    <a href="https://www.youtube.com/@OhDxnis" target="_blank">youtube</a>
-    <a href="https://soundcloud.com/ohdxnis" target="_blank">soundcloud</a>
-  </div>
+    <div id="ritual-start" class="interaction-prompt">
+        <p>[ ENTER THE VOID ]</p>
+        <p style="font-size: 8px; margin-top: 10px;">SOUND ON REQUIRED</p>
+    </div>
 
-  <div class="sc">
-    <iframe width="300" height="120"
-    scrolling="no"
-    frameborder="no"
-    allow="autoplay"
-    src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/ohdxnis">
-    </iframe>
-  </div>
-</div>
+    <div class="center-container">
+        <h1 id="main-title">OHDXNIS</h1>
+        <p class="subtitle">first albanian to do it</p>
 
-<div id="btn">ENTER SOUND</div>
+        <div class="media-shrine">
+            <iframe width="100%" height="20" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/123456789&color=%234a0000&inverse=true&auto_play=false&show_user=false"></iframe>
+        </div>
+    </div>
 
-<audio id="audio" loop>
-  <source src="New_Project (45).mp3" type="audio/mpeg">
-</audio>
+    <div class="status-bar">
+        SIGNAL: STABLE<br>
+        LOCATION: [REDACTED]<br>
+        SYSTEM: ACTIVE
+    </div>
 
-<script>
-// cursor follow
-const cursor = document.getElementById("cursor");
-document.addEventListener("mousemove", e => {
-  cursor.style.left = e.clientX + "px";
-  cursor.style.top = e.clientY + "px";
-});
+    <audio id="bg-audio" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3" type="audio/mpeg">
+    </audio>
 
-// music
-const audio = document.getElementById("audio");
-document.getElementById("btn").onclick = () => {
-  audio.play();
-  document.getElementById("btn").style.display = "none";
-};
-</script>
+    <script>
+        const ritual = document.getElementById('ritual-start');
+        const audio = document.getElementById('bg-audio');
+        const blob = document.getElementById('ambient-blob');
+        const title = document.getElementById('main-title');
 
+        // Initializing the "Ritual"
+        ritual.addEventListener('click', () => {
+            audio.volume = 0.4;
+            audio.play();
+            ritual.classList.add('hidden');
+        });
+
+        // Mouse Parallax & Distortion Logic
+        document.addEventListener('mousemove', (e) => {
+            const x = (e.clientX / window.innerWidth) - 0.5;
+            const y = (e.clientY / window.innerHeight) - 0.5;
+
+            // Move the background glow
+            blob.style.transform = `translate(${x * 50}px, ${y * 50}px) scale(1.1)`;
+
+            // Subtle title warping
+            if (Math.random() > 0.95) {
+                title.style.transform = `translate(${x * 10}px, ${y * 10}px) skew(${x * 5}deg)`;
+            }
+        });
+
+        // Chaotic Glitch Injection
+        setInterval(() => {
+            const filter = document.querySelector('#glitch feTurbulence');
+            filter.setAttribute('baseFrequency', `${Math.random() * 0.05}`);
+            
+            if(Math.random() > 0.98) {
+                title.style.letterSpacing = Math.random() * 20 + 'px';
+                setTimeout(() => title.style.letterSpacing = '0.2em', 50);
+            }
+        }, 100);
+
+        // Log cryptic messages to console
+        console.log("%cSYSTEM BREACHED: OHDXNIS DETECTED", "color: #4a0000; font-size: 20px; font-weight: bold;");
+    </script>
 </body>
 </html>
