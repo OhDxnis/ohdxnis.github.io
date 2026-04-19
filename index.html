@@ -6,167 +6,180 @@
     <title>OHDXNIS | AD INFINITUM</title>
     <style>
         :root {
-            --bg: #1a0000;
+            --abyss: #010000; /* Strict pure black */
+            --blood: #8b0000;
             --blood-neon: #ff0000;
-            --blood-pale: #ff4d4d;
+            --flesh-pale: #ffffff; /* Use white instead of grey */
             --font-ritual: 'Cinzel', serif;
         }
 
         @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@900&display=swap');
 
-        * { margin: 0; padding: 0; box-sizing: border-box; cursor: crosshair; }
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; } /* Custom cursor handled in JS */
 
         body, html {
-            background-color: var(--bg);
+            background-color: var(--abyss);
             color: #fff;
             overflow: hidden;
             height: 100vh; width: 100vw;
             user-select: none;
         }
 
-        /* --- THE SACRIFICIAL GATE --- */
+        /* --- THE INFERNAL GATE (THE UNLOCK) --- */
         #gate {
             position: fixed; inset: 0;
-            background: #fff; z-index: 9999;
-            display: flex; align-items: center; justify-content: center;
-            transition: opacity 0.5s steps(2);
+            background: #000; z-index: 9999;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            transition: opacity 1s steps(5), visibility 1s;
         }
         .gate-sigil {
-            font-size: 20vw; color: #000;
-            animation: ritual-flicker 0.05s infinite;
+            font-size: 15vw; color: var(--flesh-pale);
+            filter: drop-shadow(0 0 50px white);
+            animation: breathe 1s infinite alternate;
+            cursor: pointer;
+        }
+        #gate p { 
+            color: #fff; letter-spacing: 15px; font-size: 10px; 
+            margin-top: 40px; opacity: 0.5; font-family: monospace; 
         }
 
-        /* --- THE CHAOS ENGINES --- */
+        /* --- THE GORE ENGINE CANVASES --- */
         canvas { position: fixed; inset: 0; pointer-events: none; }
-        #abyss { z-index: 1; filter: saturate(2) contrast(1.5); }
-        #blood-rain { z-index: 2; mix-blend-mode: color-dodge; }
+        #abyss { z-index: 1; filter: contrast(2) saturate(2); } /* Feedback swarm */
+        #dripping { z-index: 2; mix-blend-mode: screen; } /* Real-time smears */
 
-        /* --- THE VIEWPORT (DISPLACED) --- */
+        /* --- THE DISTORTION VIEWPORT --- */
         .viewport {
             position: relative; z-index: 10;
             height: 100vh; width: 100vw;
             display: flex; flex-direction: column;
             align-items: center; justify-content: center;
             opacity: 0;
-            /* Constant high-frequency displacement */
-            filter: url(#massive-distort);
+            /* Constant binary displacement */
+            filter: url(#broken-terminal); 
+            transition: opacity 3s ease;
         }
 
-        /* TITLE: LIGHTER, BRIGHTER, VIOLENT */
-        .title-box {
+        /* THE TITLE: SMALLER, REFINED, GHOSTING */
+        .header { 
+            margin-bottom: 5vh; 
             text-align: center;
-            margin-bottom: 5vh;
-            position: relative;
         }
         
         h1#ritual-title {
             font-family: 'Cinzel', serif;
-            font-size: 9vw;
-            letter-spacing: 20px;
+            font-size: 7vw;
+            font-weight: 900;
+            font-style: italic;
             color: #fff;
             text-transform: uppercase;
-            text-shadow: 10px 0px 0px rgba(255,0,0,0.8), -10px 0px 0px rgba(0,255,255,0.8);
-            animation: title-shred 0.1s infinite;
+            letter-spacing: -5px;
+            /* Layered text-shadow creates "carved into screen" look */
+            text-shadow: 
+                0 0 10px rgba(255,0,0,0.8),
+                5px 5px 0px #000,
+                -2px -2px 0px #fff;
+            line-height: 0.8;
+            animation: violent-shake 0.1s infinite;
         }
 
-        /* --- THE NODES: RAZOR SHARP STABILITY --- */
+        .subtitle {
+            color: var(--blood-neon);
+            font-size: 1rem;
+            letter-spacing: 2.2rem;
+            margin-top: -10px;
+            font-weight: 900;
+            opacity: 0.6;
+            animation: ritual-flicker 2s infinite;
+        }
+
+        /* --- THE MATRIX OF NODES (ZERO DISTORTION) --- */
         .node-matrix {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
             gap: 25px;
-            z-index: 100;
+            max-width: 900px;
+            perspective: 800px;
         }
 
         .node {
             text-decoration: none;
             display: flex; flex-direction: column; align-items: center;
-            transition: 0.1s;
+            transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
         }
 
         .node .sigil {
-            font-size: 4.5rem;
-            color: var(--blood-neon);
+            font-size: 3.5rem;
+            color: var(--blood);
             margin-bottom: 5px;
-            text-shadow: 0 0 20px #ff0000;
-            animation: spin-chaos 0.5s infinite linear;
+            transition: color 0.1s;
         }
 
-        /* WHITE STABLE NAMES */
+        /* RAZOR SHARP STABLE WHITE LABELS (NO EFFECTS) */
         .node .label {
             color: #ffffff !important;
             font-family: 'Arial Black', sans-serif;
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             letter-spacing: 2px;
             text-transform: uppercase;
             background: #000;
-            padding: 8px 12px;
-            border: 2px solid #fff;
-            filter: none !important;
-            box-shadow: 5px 5px 0px #ff0000;
+            padding: 5px 10px;
+            border: 1px solid #fff;
+            filter: none !important; /* Critical: Strips SVG distortion */
+            font-weight: bold;
         }
 
-        .node:hover { transform: scale(1.2) rotate(5deg); }
-        .node:hover .label { background: #fff; color: #000 !important; box-shadow: -5px -5px 0px #000; }
+        .node:hover {
+            transform: scale(1.15) rotate(2deg);
+            z-index: 100;
+        }
+        .node:hover .sigil { color: var(--blood-neon); }
+        .node:hover .label { border-color: var(--blood-neon); background: var(--blood); color: #fff !important; }
 
-        /* --- SVG CHAOS FILTERS --- */
-        svg { position: absolute; width: 0; height: 0; }
-
-        @keyframes ritual-flicker { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0; transform: scale(1.1); } }
+        /* --- KEYFRAMES --- */
+        @keyframes ritual-flicker { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
+        @keyframes breathe { from { opacity: 0.1; } to { opacity: 1; } }
         
-        @keyframes title-shred {
-            0% { transform: translate(2px, -2px) skewX(5deg); }
-            50% { transform: translate(-2px, 2px) skewX(-5deg); filter: invert(1); }
-            100% { transform: translate(0,0) skewX(0deg); }
+        @keyframes violent-shake {
+            0% { transform: translate(0,0); }
+            20% { transform: translate(-3px, 1px) skewX(2deg); }
+            40% { transform: translate(3px, -1px) skewX(-2deg); }
+            100% { transform: translate(0,0); }
         }
 
-        @keyframes spin-chaos {
-            from { transform: rotate(0deg) scale(1); }
-            50% { transform: rotate(180deg) scale(1.5); }
-            to { transform: rotate(360deg) scale(1); }
-        }
-
-        /* Flash Layer */
-        #strobe {
+        /* Screen tear overlay */
+        #tear-overlay {
             position: fixed; inset: 0;
-            background: #ff0000;
-            z-index: 5; pointer-events: none;
-            opacity: 0;
-            animation: strobe-flash 4s infinite;
+            z-index: 200; pointer-events: none;
+            box-shadow: none;
+            animation: screen-tear 4s infinite;
         }
-        @keyframes strobe-flash {
-            0%, 90% { opacity: 0; }
-            91% { opacity: 0.2; }
-            92% { opacity: 0; }
-            93% { opacity: 0.5; background: #fff; }
-            94% { opacity: 0; }
+
+        @keyframes screen-tear {
+            0%, 95%, 100% { box-shadow: none; transform: translateX(0); }
+            96% { box-shadow: inset 0 20px 0 red, inset 0 -20px 0 red; transform: translateX(10px); }
+            98% { box-shadow: inset 20px 0 0 white; transform: translateX(-10px); }
         }
 
     </style>
 </head>
-<body onclick="descend()">
+<body>
 
-    <div id="gate">
+    <div id="gate" onclick="awaken()">
         <div class="gate-sigil">🜏</div>
+        <p>TAP TO INITIATE AD INFINITUM</p>
     </div>
 
-    <div id="strobe"></div>
-
-    <svg>
-        <filter id="massive-distort">
-            <feTurbulence type="fractalNoise" baseFrequency="0.01" numOctaves="3" result="noise">
-                <animate attributeName="baseFrequency" values="0.01;0.05;0.01" dur="0.2s" repeatCount="indefinite" />
-            </feTurbulence>
-            <feDisplacementMap in="SourceGraphic" in2="noise" scale="30" />
-            <feColorMatrix type="saturate" values="2" />
-        </filter>
-    </svg>
-
+    <div id="tear-overlay"></div>
     <canvas id="abyss"></canvas>
-    <canvas id="blood-rain"></canvas>
+    <canvas id="dripping"></canvas>
 
-    <div class="viewport" id="main">
-        <div class="title-box">
+    <div class="viewport" id="ui">
+        <div class="header">
             <h1 id="ritual-title">OHDXNIS</h1>
+            <p class="subtitle">AD INFINITUM</p>
         </div>
 
         <div class="node-matrix">
@@ -177,7 +190,7 @@
             <a href="https://www.youtube.com/@OhDxnis" target="_blank" class="node">
                 <span class="sigil">⸸</span><span class="label">YouTube</span></a>
             <a href="https://ohdxnis.fandom.com/wiki/OhDxnis!_Wiki" target="_blank" class="node">
-                <span class="sigil">⛧</span><span class="label">Fandom</span></a>
+                <span class="sigil">⛧</span><span class="label">Wiki Fandom</span></a>
             <a href="https://www.tiktok.com/@nerd.alt" target="_blank" class="node">
                 <span class="sigil">🜔</span><span class="label">TikTok</span></a>
             <a href="https://www.instagram.com/denis.gjoka_/" target="_blank" class="node">
@@ -191,99 +204,139 @@
         </div>
     </div>
 
-    <audio id="loop" loop>
+    <svg>
+        <filter id="broken-terminal">
+            <feTurbulence type="fractalNoise" baseFrequency="0.01" numOctaves="3" result="noise">
+                <animate attributeName="baseFrequency" values="0.01;0.05;0.01" dur="0.1s" repeatCount="indefinite" />
+            </feTurbulence>
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="30" />
+            <feColorMatrix values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0" result="redden"/>
+            <feComposite in="redden" in2="SourceGraphic" operator="arithmetic" k2="0.8" k3="0.2"/>
+        </filter>
+    </svg>
+
+    <audio id="wire-audio" loop>
         <source src="Bleood  type beat wires.mp3" type="audio/mpeg">
     </audio>
 
     <script>
+        const audio = document.getElementById('wire-audio');
         const abyss = document.getElementById('abyss');
-        const rain = document.getElementById('blood-rain');
+        const drips = document.getElementById('dripping');
         const aCtx = abyss.getContext('2d');
-        const rCtx = rain.getContext('2d');
-        let w, h, frame = 0;
-        let sigils = [];
-        let drops = [];
-
-        const chars = ['⛧','🜏','⸸','𖤐','✕','🜓','🜕','🜔','🜍','🜚','🜛','🜜','🜝','🜞','🜟','🜠','🜡','🜢','🜣','🜤','🜥','🜦','🜧','🜨'];
+        const dCtx = drips.getContext('2d');
+        
+        let width, height, frame = 0;
+        let bloodFlow = [];
+        let esotericFloating = [];
+        let mouse = { x: -2000, y: -2000 };
+        let gateUnmasked = false;
 
         function init() {
-            w = abyss.width = rain.width = window.innerWidth;
-            h = abyss.height = rain.height = window.innerHeight;
-            sigils = [];
-            // MASSIVE SYMBOLIC CHAOS
-            for(let i=0; i<600; i++) {
-                sigils.push({
-                    x: Math.random() * w,
-                    y: Math.random() * h,
-                    s: Math.random() * 50 + 10,
-                    char: chars[Math.floor(Math.random() * chars.length)],
-                    vR: (Math.random() - 0.5) * 0.5,
-                    angle: Math.random() * Math.PI * 2,
-                    color: Math.random() > 0.5 ? '#ff0000' : '#ffffff'
+            width = abyss.width = drips.width = window.innerWidth;
+            height = abyss.height = drips.height = window.innerHeight;
+            
+            // Generate massive amounts of blood sigils (Increased to 1200)
+            for(let i=0; i<1200; i++) {
+                bloodFlow.push({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    h: Math.random() * 80 + 30,
+                    w: Math.random() * 2 + 1,
+                    s: Math.random() * 6 + 3,
+                    char: ['⛧', '🜏', '⸸', '𖤐', '🜓', '✕'][Math.floor(Math.random()*6)],
+                    op: Math.random() * 0.6
                 });
             }
         }
 
-        function spawnDrop() {
-            drops.push({
-                x: Math.random() * w,
-                y: -100,
-                vY: Math.random() * 30 + 10,
-                l: Math.random() * 100 + 50,
-                w: Math.random() * 5 + 2
-            });
-        }
+        function drawAbyss() {
+            // Persistent blood trails (does not clear)
+            aCtx.fillStyle = 'rgba(0, 0, 0, 0.1)'; 
+            aCtx.fillRect(0, 0, width, height);
 
-        function draw() {
-            // White/Red Feedback smear
-            aCtx.fillStyle = frame % 10 === 0 ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.2)';
-            aCtx.fillRect(0, 0, w, h);
-
-            sigils.forEach(s => {
-                aCtx.save();
-                aCtx.translate(s.x, s.y);
-                aCtx.rotate(s.angle);
-                aCtx.fillStyle = s.color;
-                aCtx.font = `bold ${s.s}px serif`;
-                aCtx.fillText(s.char, 0, 0);
-                aCtx.restore();
+            // Draw Smearing Sigil Swarm
+            bloodFlow.forEach(p => {
+                aCtx.fillStyle = `rgba(${Math.random() > 0.9 ? 255 : 139}, 0, 0, ${p.op})`; // Random Red Flash
+                aCtx.font = `${p.w * 8}px serif`;
+                aCtx.fillText(p.char, p.x, p.y);
                 
-                s.angle += s.vR;
-                s.y += Math.sin(frame * 0.1) * 5;
-                if(Math.random() > 0.98) s.char = chars[Math.floor(Math.random() * chars.length)];
+                // Connection Wires to Cursor
+                let dist = Math.hypot(p.x - mouse.x, p.y - mouse.y);
+                if(dist < 300) {
+                    aCtx.strokeStyle = `rgba(255, 0, 0, ${1 - dist/300})`;
+                    aCtx.lineWidth = 0.5;
+                    aCtx.beginPath();
+                    aCtx.moveTo(p.x, p.y);
+                    aCtx.lineTo(mouse.x, mouse.y);
+                    aCtx.stroke();
+                }
+
+                p.y += p.s;
+                if(p.y > height) {
+                    p.y = -50;
+                    p.x = Math.random() * width;
+                }
             });
-
-            // Gory Rain
-            rCtx.clearRect(0, 0, w, h);
-            rCtx.strokeStyle = '#ff0000';
-            drops.forEach((d, i) => {
-                rCtx.lineWidth = d.w;
-                rCtx.beginPath();
-                rCtx.moveTo(d.x, d.y);
-                rCtx.lineTo(d.x, d.y + d.l);
-                rCtx.stroke();
-                d.y += d.vY;
-                if(d.y > h) drops.splice(i, 1);
-            });
-
-            if(drops.length < 150) spawnDrop();
-
-            frame++;
-            requestAnimationFrame(draw);
         }
 
-        function descend() {
-            document.getElementById('loop').play().catch(()=>{});
+        // --- REAL TIME SMMEAR ENGINE ---
+        function drawFlesh() {
+            dCtx.fillStyle = 'rgba(0,0,0,0.05)';
+            dCtx.fillRect(0,0,width,height);
+
+            // Random gore splatters around mouse
+            if(Math.random() > 0.7 && gateUnmasked) {
+                dCtx.fillStyle = 'rgba(255,0,0,0.3)';
+                dCtx.font = '50px serif';
+                const symbols = ['🜚', '✕', '🜗', '🜖', '🜨', '🜏'];
+                for(let i=0; i<5; i++) {
+                    dCtx.fillText(
+                        symbols[Math.floor(Math.random()*symbols.length)], 
+                        mouse.x + (Math.random()*200-100), 
+                        mouse.y + (Math.random()*200-100)
+                    );
+                }
+            }
+        }
+
+        function animate() {
+            frame++;
+            drawAbyss();
+            drawFlesh();
+            requestAnimationFrame(animate);
+        }
+
+        function awaken() {
+            audio.play().catch(e => console.error("Audio trigger blocked:", e));
             document.getElementById('gate').style.opacity = '0';
             setTimeout(() => {
                 document.getElementById('gate').style.display = 'none';
-                document.getElementById('main').style.opacity = '1';
-                draw();
-            }, 500);
-            init();
+                document.getElementById('ui').style.opacity = '1';
+                gateUnmasked = true;
+                init(); // Re-init particles based on screen unmasking
+                animate(); // Start animation loop after unmuting
+            }, 1000);
         }
 
-        window.onresize = init;
+        window.addEventListener('resize', init);
+        
+        // Track mouse and add a smear effect cursor
+        document.addEventListener('mousemove', (e) => {
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+            
+            if(gateUnmasked) {
+                // Parallax shift for Matrix
+                const moveX = (e.clientX / width - 0.5) * 40;
+                const moveY = (e.clientY / height - 0.5) * 40;
+                document.getElementById('ui').style.marginLeft = moveX + 'px';
+                document.getElementById('ui').style.marginTop = moveY + 'px';
+            }
+        });
+
+        // console message, in character
+        console.log("%cARCANE TERMINAL: AD INFINITUM. RED, BLACK, WHITE. TOTAL SACRIFICE.", "color: #ff0000; font-family: monospace; font-size: 1.2rem; background: #000; padding: 10px; border: 1px solid #4a0000;");
     </script>
 </body>
 </html>
