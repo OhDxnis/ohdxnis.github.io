@@ -12,92 +12,140 @@ body {
     background: black;
     color: white;
     font-family: 'Inter', sans-serif;
-    overflow-x: hidden;
+    overflow: hidden;
 }
 
-/* background image layer */
+/* layered background image */
 .bg {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    width: 110%;
+    height: 110%;
+    left: -5%;
+    top: -5%;
     background: url("bg.jpeg") center/cover no-repeat;
-    opacity: 0.15;
-    filter: contrast(120%) grayscale(100%);
-    z-index: -2;
+    filter: contrast(130%) grayscale(100%) brightness(0.4);
+    opacity: 0.2;
+    animation: bgMove 12s infinite alternate ease-in-out;
+    z-index: -5;
 }
 
-/* glitch overlay */
-.glitch {
+@keyframes bgMove {
+    0% { transform: scale(1.05) translate(0px,0px); }
+    100% { transform: scale(1.1) translate(20px,-10px); }
+}
+
+/* heavy noise */
+.noise {
     position: fixed;
+    width: 300%;
+    height: 300%;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.08'/%3E%3C/svg%3E");
+    animation: noiseShift 0.2s infinite linear;
+    z-index: -3;
+}
+
+@keyframes noiseShift {
+    0% { transform: translate(0,0); }
+    100% { transform: translate(-10px,10px); }
+}
+
+/* RGB glitch layers */
+.glitch {
+    position: relative;
+    font-size: 110px;
+    letter-spacing: 14px;
+    font-weight: 200;
+    animation: flicker 1.8s infinite;
+}
+
+.glitch::before,
+.glitch::after {
+    content: "OhDxnis!";
+    position: absolute;
+    left: 0;
+    top: 0;
     width: 100%;
-    height: 100%;
-    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.7' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
-    z-index: -1;
+}
+
+.glitch::before {
+    color: red;
+    transform: translate(3px, 0);
+    opacity: 0.6;
+    animation: glitch1 0.4s infinite;
+}
+
+.glitch::after {
+    color: cyan;
+    transform: translate(-3px, 0);
+    opacity: 0.6;
+    animation: glitch2 0.3s infinite;
+}
+
+@keyframes glitch1 {
+    0% { transform: translate(3px,0); }
+    50% { transform: translate(6px,-2px); }
+    100% { transform: translate(3px,0); }
+}
+
+@keyframes glitch2 {
+    0% { transform: translate(-3px,0); }
+    50% { transform: translate(-6px,2px); }
+    100% { transform: translate(-3px,0); }
 }
 
 /* layout */
 .container {
-    padding: 80px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    text-align: center;
+    animation: float 5s infinite ease-in-out;
 }
 
-/* main title */
-h1 {
-    font-size: 90px;
-    letter-spacing: 12px;
-    margin: 0;
-    font-weight: 200;
+@keyframes float {
+    0% { transform: translate(-50%,-50%) translateY(0px); }
+    50% { transform: translate(-50%,-50%) translateY(-10px); }
+    100% { transform: translate(-50%,-50%) translateY(0px); }
 }
 
-/* subtitle */
+/* text */
 p {
-    opacity: 0.6;
+    opacity: 0.5;
     max-width: 500px;
-    line-height: 1.5;
+    margin: 20px auto;
 }
 
-/* links */
-.links {
-    margin-top: 40px;
-}
-
+/* links chaos style */
 a {
     display: block;
     color: white;
     text-decoration: none;
-    margin: 8px 0;
-    opacity: 0.5;
-    letter-spacing: 2px;
-    font-size: 13px;
+    margin: 12px 0;
+    opacity: 0.4;
+    letter-spacing: 3px;
+    transition: 0.2s;
 }
 
 a:hover {
     opacity: 1;
+    transform: skew(-10deg) scale(1.1);
 }
 
-/* section */
-.section {
-    margin-top: 80px;
-}
-
-/* soundcloud embed */
-iframe {
-    margin-top: 20px;
+/* scanlines */
+.scan {
+    position: fixed;
     width: 100%;
-    max-width: 600px;
-    height: 160px;
-    border: none;
-}
-
-/* subtle animation */
-h1 {
-    animation: fade 1.2s ease-out;
-}
-
-@keyframes fade {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
+    height: 100%;
+    background: repeating-linear-gradient(
+        to bottom,
+        rgba(255,255,255,0.05),
+        rgba(255,255,255,0.05) 1px,
+        transparent 2px,
+        transparent 4px
+    );
+    z-index: -1;
+    mix-blend-mode: overlay;
 }
 </style>
 </head>
@@ -105,32 +153,20 @@ h1 {
 <body>
 
 <div class="bg"></div>
-<div class="glitch"></div>
+<div class="noise"></div>
+<div class="scan"></div>
 
 <div class="container">
 
-    <h1>OhDxnis!</h1>
+    <div class="glitch">OhDxnis!</div>
 
     <p>
-        Albanian underground artist. Dark melodic rage influence. Minimal identity, heavy atmosphere.
+        Proud albanian artist
     </p>
 
-    <div class="links">
-        <a href="https://soundcloud.com/ohdxnis">SOUNDCLOUD</a>
-        <a href="https://www.youtube.com/@OhDxnis">YOUTUBE</a>
-        <a href="https://www.instagram.com/denis.gjoka_/">INSTAGRAM</a>
-        <a href="https://linktr.ee/OhDxnis">ALL LINKS</a>
-    </div>
-
-    <div class="section">
-        <h2>FEATURED</h2>
-
-        <!-- SOUNDLOUD PLAYER -->
-        <iframe 
-        src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/ohdxnis&color=%23000000&auto_play=true&hide_related=false&show_comments=false&show_user=true&show_reposts=false&show_teaser=false">
-        </iframe>
-
-    </div>
+    <a href="https://soundcloud.com/ohdxnis">SOUNDCLOUD</a>
+    <a href="https://www.youtube.com/@OhDxnis">YOUTUBE</a>
+    <a href="https://www.instagram.com/denis.gjoka_/">INSTAGRAM</a>
 
 </div>
 
