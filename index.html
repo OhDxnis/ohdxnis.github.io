@@ -3,252 +3,348 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OHDXNIS | DIGITAL RITUAL</title>
+    <title>OHDXNIS | AD INFIMUM</title>
     <style>
         :root {
-            --bg-deep: #020000;
-            --blood: #8b0000;
-            --dark-blood: #3a0000;
-            --glitch-grey: #999999;
+            --bg-deep: #010000;
+            --blood-fresh: #ff0000;
+            --blood-dried: #5e0000;
+            --viscera: #1a0000;
+            --glitch-cyan: #00ffff;
+            --tech-grey: #666;
+            --font-main: 'Courier New', Courier, monospace;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; cursor: crosshair; }
 
         body, html {
             background-color: var(--bg-deep);
-            color: var(--glitch-grey);
-            font-family: 'Courier New', Courier, monospace;
+            color: var(--tech-grey);
+            font-family: var(--font-main);
             overflow: hidden;
-            height: 100vh;
-            width: 100vw;
+            height: 100vh; width: 100vw;
             text-transform: uppercase;
+            letter-spacing: 0.1em;
         }
 
         /* --- ATMOSPHERIC LAYERS --- */
         
         #vhs-grain {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: url('https://upload.wikimedia.org/wikipedia/commons/7/76/1k_Resolution_White_Noise_Video_Frame.png');
-            opacity: 0.07;
-            pointer-events: none;
-            z-index: 999;
-            mix-blend-mode: overlay;
-            animation: noise 0.1s infinite;
+            opacity: 0.08; pointer-events: none; z-index: 999;
+            mix-blend-mode: color-dodge; animation: noise 0.1s infinite;
         }
 
-        .blood-pulse {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: radial-gradient(circle at center, var(--dark-blood) 0%, transparent 85%);
-            opacity: 0.7;
-            z-index: 1;
-            animation: pulse-blood 4s infinite alternate ease-in-out;
+        .blood-rain {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: linear-gradient(to bottom, transparent, var(--viscera), transparent);
+            opacity: 0.4; z-index: 1; pointer-events: none;
+            animation: blood-pulse-bg 10s infinite;
         }
 
-        /* --- SYMBOLIC DENSITY --- */
+        /* --- DRIPPING BLOOD EFFECT --- */
+        #blood-canvas {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 2; pointer-events: none; opacity: 0.7;
+        }
+
+        /* --- OCCULT DENSITY (SVG SYMBOLS) --- */
+        #symbols-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 3; pointer-events: none;
+        }
 
         .giant-sigil {
-            position: absolute;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 90vh;
-            color: var(--blood);
-            opacity: 0.04;
-            z-index: 2;
-            pointer-events: none;
-            animation: slow-spin 80s linear infinite;
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            font-size: 110vh; color: var(--blood-dried); opacity: 0.04;
+            z-index: 4; pointer-events: none; animation: slow-spin 90s linear infinite;
         }
 
-        .floating-symbols {
-            position: absolute;
-            width: 100%; height: 100%;
-            z-index: 3;
-            pointer-events: none;
+        /* --- RORSCHACH / GORE BLOT --- */
+        #viscera-blot {
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 80vw; height: 80vh;
+            background: radial-gradient(circle, var(--blood-fresh) 0%, transparent 70%);
+            filter: url(#disintegrate); opacity: 0.1;
+            z-index: 5; pointer-events: none; animation: pulse-viscera 8s infinite;
         }
 
-        /* --- MAIN IDENTITY --- */
+        /* --- INTERACTION MASK (The Seal) --- */
+        #lock-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle, #000 30%, var(--viscera) 100%);
+            color: var(--blood-fresh); z-index: 1000;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            text-align: center; cursor: pointer; transition: opacity 2s, visibility 2s;
+            backdrop-filter: blur(20px);
+        }
+        #lock-screen p { font-size: 12px; animation: flicker 0.1s infinite; margin-top: 20px;}
+        .seal { font-size: 80px; filter: url(#bleeding-title); color: #fff;}
 
-        .center-container {
+        /* --- MAIN CONTENT CONTAINER --- */
+        .viewport {
+            position: relative; z-index: 20;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            height: 100vh; width: 100vw;
+            opacity: 0; visibility: hidden; transition: opacity 3s;
+        }
+        .unlocked .viewport { opacity: 1; visibility: visible; }
+
+        /* --- THE TITLE: BLEEDING SINISTER --- */
+        h1#sinister-title {
+            font-size: 14vw; font-weight: 900;
+            color: #fff; letter-spacing: -0.08em;
+            filter: url(#bleeding-title);
+            animation: violent-flicker 5s infinite;
             position: relative;
-            z-index: 10;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            text-align: center;
-            padding: 20px;
         }
-
-        h1 {
-            font-size: 11vw;
-            font-weight: 900;
-            color: #fff;
-            letter-spacing: -0.05em;
-            text-shadow: 5px 0px var(--blood), -3px 0px #000;
-            filter: url(#glitch);
-            animation: aggressive-flicker 2s infinite;
+        h1#sinister-title::before {
+            content: 'OHDXNIS'; position: absolute; top: 0; left: -2px;
+            color: var(--glitch-cyan); opacity: 0.3; z-index: -1; animation: glitch-anim 0.2s infinite;
+        }
+        h1#sinister-title::after {
+            content: 'OHDXNIS'; position: absolute; top: 0; left: 2px;
+            color: var(--blood-fresh); opacity: 0.4; z-index: -1; animation: glitch-anim 0.3s infinite reverse;
         }
 
         .subtitle {
-            font-size: 1.2rem;
-            margin-top: -15px;
-            color: var(--blood);
-            letter-spacing: 0.5em;
-            text-shadow: 0px 0px 15px var(--blood);
-            font-weight: bold;
+            font-size: 1.5rem; margin-top: -30px;
+            color: var(--blood-fresh); letter-spacing: 0.6em;
+            text-shadow: 0 0 20px var(--blood-fresh); font-weight: bold;
+            animation: wave-text 3s infinite;
         }
 
         /* --- THE LINK MATRIX --- */
-        
         .link-grid {
-            margin-top: 40px;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            z-index: 20;
-            max-width: 800px;
+            margin-top: 50px; display: grid; grid-template-columns: repeat(3, 1fr);
+            gap: 15px; z-index: 30; max-width: 900px;
+            filter: url(#decay);
         }
+        @media (max-width: 600px) { .link-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; } }
 
-        @media (max-width: 600px) { .link-grid { grid-template-columns: repeat(2, 1fr); } }
-
-        .ritual-link {
-            color: #777;
-            text-decoration: none;
-            font-size: 0.75rem;
-            font-weight: bold;
-            padding: 10px;
-            border: 1px solid rgba(139, 0, 0, 0.2);
-            background: rgba(0,0,0,0.6);
-            transition: all 0.1s;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+        .ritual-path {
+            color: #ccc; text-decoration: none; font-size: 10px; font-weight: bold;
+            padding: 15px; border: 1px solid rgba(255, 0, 0, 0.1);
+            background: rgba(0,0,0,0.8);
+            transition: all 0.05s;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            position: relative; overflow: hidden;
         }
+        
+        .ritual-path span.icon { font-size: 2.2rem; margin-bottom: 8px; color: var(--blood-dried); transition: 0.2s; }
 
-        .ritual-link span { font-size: 1.5rem; margin-bottom: 5px; color: var(--blood); }
-
-        .ritual-link:hover {
-            color: #fff;
-            background: var(--dark-blood);
-            border: 1px solid var(--blood);
-            transform: scale(1.1) rotate(1deg);
-            text-shadow: 0 0 10px #fff;
+        .ritual-path:hover {
+            color: #fff; background: var(--blood-dried);
+            border: 1px solid var(--blood-fresh); transform: scale(1.05) rotate(${Math.random()*4-2}deg);
+            box-shadow: 0 0 20px rgba(255,0,0,0.5);
         }
+        .ritual-path:hover span.icon { color: #fff; animation: violent-flicker 0.1s infinite; }
 
-        /* --- MEDIA INTEGRATION --- */
-
+        /* --- SOUNDCLOUD VISUALS --- */
         .media-shrine {
-            margin-top: 30px;
-            width: 350px;
-            filter: invert(1) contrast(2) opacity(0.3);
-            z-index: 20;
+            margin-top: 40px; width: 350px;
+            filter: invert(1) contrast(3) sepia(1) hue-rotate(-50deg) opacity(0.2);
+            z-index: 30; transition: 0.3s;
         }
+        .media-shrine:hover { opacity: 0.9; filter: invert(1) contrast(1.5) sepia(1) hue-rotate(-50deg); }
 
-        /* --- ANIMATIONS --- */
+        /* --- SVG FILTERS (THE SINISTER ENGINE) --- */
+        svg.filters { position: absolute; width: 0; height: 0; }
 
+        /* --- ANIMATIONS KEYFRAMES --- */
         @keyframes noise {
             0% { transform: translate(0,0) }
-            50% { transform: translate(-3%, 3%) }
+            50% { transform: translate(-2%, 2%) }
             100% { transform: translate(1%, -1%) }
         }
-
-        @keyframes pulse-blood {
-            0% { opacity: 0.4; transform: scale(1); }
-            100% { opacity: 0.8; transform: scale(1.1); }
+        @keyframes slow-spin { from { transform: translate(-50%, -50%) rotate(0deg); } to { transform: translate(-50%, -50%) rotate(-360deg); } }
+        @keyframes blood-pulse-bg { 0%, 100% { opacity: 0.4; } 50% { opacity: 0.7; } }
+        @keyframes pulse-viscera { 0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.1; } 50% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.15; } }
+        @keyframes violent-flicker {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            1% { opacity: 0.1; transform: scale(1.1) skewX(20deg); }
+            2% { opacity: 1; transform: scale(1); skewX(0deg); }
+            80% { opacity: 1; }
+            81% { opacity: 0; }
+            82% { opacity: 1; }
         }
-
-        @keyframes slow-spin {
-            from { transform: translate(-50%, -50%) rotate(0deg); }
-            to { transform: translate(-50%, -50%) rotate(-360deg); }
+        @keyframes glitch-anim {
+            0% { transform: translate(0); }
+            20% { transform: translate(-3px, 2px); }
+            40% { transform: translate(-3px, -2px); }
+            60% { transform: translate(3px, 2px); }
+            80% { transform: translate(3px, -2px); }
+            100% { transform: translate(0); }
         }
-
-        @keyframes aggressive-flicker {
-            0% { opacity: 1; filter: contrast(1); }
-            2% { opacity: 0.3; filter: contrast(5); }
-            4% { opacity: 1; }
-            70% { opacity: 1; transform: scale(1); }
-            71% { transform: scale(1.05) skewX(10deg); }
-            72% { transform: scale(1); skewX(0deg); }
+        @keyframes wave-text {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
         }
+        @keyframes flicker { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+        /* Hidden Utility */
+        .hidden { display: none !important; opacity: 0; visibility: hidden; }
 
     </style>
 </head>
-<body>
+<body class="locked">
 
-    <svg style="position: absolute; width: 0; height: 0;">
-        <filter id="glitch">
-            <feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="4" result="noise" />
-            <feDisplacementMap in="SourceGraphic" in2="noise" scale="20" />
-        </filter>
+    <div id="lock-screen" onclick="breakSeal()">
+        <div class="seal">⛧</div>
+        <p>[ BREAK THE SEAL TO INITIATE DESCENSION ]</p>
+    </div>
+
+    <svg class="filters">
+        <defs>
+            <filter id="bleeding-title" x="-20%" y="-20%" width="140%" height="140%">
+                <feTurbulence type="fractalNoise" baseFrequency="0.01" numOctaves="5" result="noise" />
+                <feDisplacementMap in="SourceGraphic" in2="noise" scale="15" />
+                <feGaussianBlur in="SourceGraphic" stdDeviation="1" result="blur" />
+                <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 18 -7" result="goo" />
+                <feBlend in="SourceGraphic" in2="goo" mode="normal" />
+            </filter>
+            <filter id="decay">
+                <feTurbulence type="fractalNoise" baseFrequency="0.08" numOctaves="2" result="noise"/>
+                <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 -0.5" result="heavyNoise"/>
+                <feComposite operator="in" in="SourceGraphic" in2="heavyNoise" result="composite"/>
+            </filter>
+            <filter id="disintegrate">
+                <feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="2" />
+                <feDisplacementMap in="SourceGraphic" scale="80" />
+            </filter>
+        </defs>
     </svg>
 
     <div id="vhs-grain"></div>
-    <div class="blood-pulse"></div>
+    <div class="blood-rain"></div>
     <div class="giant-sigil">🜏</div>
-    <div class="floating-symbols" id="symbols-container"></div>
+    <canvas id="blood-canvas"></canvas>
+    <div id="symbols-container"></div>
+    <div id="viscera-blot"></div>
 
-    <div class="center-container">
-        <h1 id="main-title">OHDXNIS</h1>
-        <p class="subtitle">⸸ AD INFIMUM ⸸</p>
+    <div class="viewport">
+        <h1 id="sinister-title">OHDXNIS</h1>
+        <p class="subtitle">⸸ DESCEND ⸸</p>
 
         <div class="link-grid">
-            <a href="https://it.wikipedia.org/wiki/Utente:Denis.Gjoka00/Sandbox" target="_blank" class="ritual-link"><span>🜏</span>WIKIPEDIA</a>
-            <a href="https://genius.com/artists/Ohdxnis" target="_blank" class="ritual-link"><span>𖤐</span>GENIUS</a>
-            <a href="https://www.youtube.com/@OhDxnis" target="_blank" class="ritual-link"><span>⸸</span>YOUTUBE</a>
-            <a href="https://ohdxnis.fandom.com/wiki/OhDxnis!_Wiki" target="_blank" class="ritual-link"><span>⛧</span>WIKI FANDOM</a>
-            <a href="https://www.tiktok.com/@nerd.alt" target="_blank" class="ritual-link"><span>🜔</span>TIKTOK</a>
-            <a href="https://www.instagram.com/denis.gjoka_/" target="_blank" class="ritual-link"><span>🜏</span>INSTAGRAM</a>
-            <a href="https://soundcloud.com/ohdxnis" target="_blank" class="ritual-link"><span>🜍</span>SOUNDCLOUD</a>
-            <a href="https://open.spotify.com/artist/4U3Ylg19PV91nwShOuFFGR" target="_blank" class="ritual-link"><span>🜕</span>SPOTIFY ARTIST</a>
-            <a href="https://open.spotify.com/show/6XWs4fWUVKMWPl3Vl8ejFx" target="_blank" class="ritual-link"><span>🜓</span>MIXTAPE (PODCAST)</a>
+            <a href="https://it.wikipedia.org/wiki/Utente:Denis.Gjoka00/Sandbox" target="_blank" class="ritual-path"><span class="icon">🜏</span>WIKIPEDIA</a>
+            <a href="https://genius.com/artists/Ohdxnis" target="_blank" class="ritual-path"><span class="icon">𖤐</span>GENIUS</a>
+            <a href="https://www.youtube.com/@OhDxnis" target="_blank" class="ritual-path"><span class="icon">⸸</span>YOUTUBE</a>
+            <a href="https://ohdxnis.fandom.com/wiki/OhDxnis!_Wiki" target="_blank" class="ritual-path"><span class="icon">⛧</span>WIKI FANDOM</a>
+            <a href="https://www.tiktok.com/@nerd.alt" target="_blank" class="ritual-path"><span class="icon">🜔</span>TIKTOK</a>
+            <a href="https://www.instagram.com/denis.gjoka_/" target="_blank" class="ritual-path"><span class="icon">🜏</span>INSTAGRAM</a>
+            <a href="https://soundcloud.com/ohdxnis" target="_blank" class="ritual-path"><span class="icon">🜍</span>SOUNDCLOUD</a>
+            <a href="https://open.spotify.com/artist/4U3Ylg19PV91nwShOuFFGR" target="_blank" class="ritual-path"><span class="icon">🜕</span>SPOTIFY</a>
+            <a href="https://open.spotify.com/show/6XWs4fWUVKMWPl3Vl8ejFx" target="_blank" class="ritual-path"><span class="icon">🜓</span>MIXTAPE</a>
         </div>
 
         <div class="media-shrine">
-            <iframe width="100%" height="20" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/123456789&color=%238b0000&inverse=true&auto_play=false&show_user=false"></iframe>
+            <iframe width="100%" height="20" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/123456789&color=%23ff0000&inverse=true&auto_play=false&show_user=false"></iframe>
         </div>
     </div>
 
-    <audio id="bg-audio" loop autoplay>
+    <audio id="bg-audio" loop>
         <source src="New_Project (45).mp3" type="audio/mpeg">
     </audio>
 
     <script>
         const audio = document.getElementById('bg-audio');
+        const viewport = document.querySelector('.viewport');
+        const lock = document.getElementById('lock-screen');
         const symbolContainer = document.getElementById('symbols-container');
+        const canvas = document.getElementById('blood-canvas');
+        const ctx = canvas.getContext('2d');
 
-        // Audio Activation: Still requires one click anywhere to bypass browser security
-        document.body.addEventListener('click', () => {
-            if(audio.paused) {
-                audio.volume = 0.7;
-                audio.play();
+        // CANVAS SETUP
+        let width, height;
+        function resizeCanvas() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        // INITIATE RITUAL (Break Seal)
+        function breakSeal() {
+            document.body.classList.remove('locked');
+            document.body.classList.add('unlocked');
+            lock.style.opacity = '0';
+            setTimeout(() => lock.style.visibility = 'hidden', 2000);
+            
+            // Audio trigger
+            audio.volume = 0.8;
+            audio.play();
+            
+            // Start Canvas Bleeding
+            initBloodDrips();
+        }
+
+        // CANVAS DRIPPING BLOOD
+        let drops = [];
+        function initBloodDrips() {
+            drops = [];
+            for (let i = 0; i < 30; i++) {
+                drops.push({
+                    x: Math.random() * width,
+                    y: Math.random() * -height,
+                    speed: 1 + Math.random() * 3,
+                    len: 5 + Math.random() * 20,
+                    width: 1 + Math.random() * 2
+                });
             }
-        }, { once: false });
+            animateBlood();
+        }
 
-        // Heavy Symbol Scattering
-        const occultSymbols = ['⛧', '🜏', '⸸', '†', '𖤐', '🜓', '🜕', '🜔', '🜍', '🜎', '🜏'];
+        function animateBlood() {
+            if (document.body.classList.contains('locked')) return;
+            ctx.clearRect(0, 0, width, height);
+            ctx.strokeStyle = '#5e0000'; // dried_blood
+            ctx.lineCap = 'round';
+
+            drops.forEach(drop => {
+                ctx.lineWidth = drop.width;
+                ctx.beginPath();
+                ctx.moveTo(drop.x, drop.y);
+                ctx.lineTo(drop.x, drop.y + drop.len);
+                ctx.stroke();
+
+                drop.y += drop.speed;
+                
+                // Add pooling effect at bottom (very abstract)
+                if (drop.y > height) {
+                    ctx.fillStyle = '#1a0000';
+                    ctx.beginPath();
+                    ctx.ellipse(drop.x, height, drop.width * 2, 2, 0, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    drop.y = Math.random() * -100;
+                    drop.x = Math.random() * width;
+                }
+            });
+            requestAnimationFrame(animateBlood);
+        }
+
+        // OCCULT SYMBOL SCATTER (Increased Density)
+        const occultSymbols = ['⛧', '🜏', '⸸', '†', '𖤐', '🜓', '🜕', '🜔', '🜍', '🜎', '🜏', '✕', '🜚'];
         
-        for(let i = 0; i < 40; i++) {
+        for(let i = 0; i < 60; i++) {
             let sym = document.createElement('div');
             sym.innerText = occultSymbols[Math.floor(Math.random() * occultSymbols.length)];
             sym.style.position = 'absolute';
             sym.style.left = Math.random() * 100 + 'vw';
             sym.style.top = Math.random() * 100 + 'vh';
-            sym.style.fontSize = (Math.random() * 3 + 0.5) + 'rem';
+            sym.style.fontSize = (Math.random() * 4 + 0.5) + 'rem';
             sym.style.opacity = Math.random() * 0.4;
-            sym.style.color = Math.random() > 0.5 ? '#4a0000' : '#222';
+            sym.style.color = Math.random() > 0.6 ? '#7a0000' : '#111';
             sym.style.transform = `rotate(${Math.random() * 360}deg)`;
-            sym.style.filter = `blur(${Math.random() * 3}px)`;
+            sym.style.filter = `blur(${Math.random() * 4}px)`;
             
-            // Random floating motion
             sym.animate([
                 { transform: `translate(0, 0) rotate(0deg)` },
-                { transform: `translate(${Math.random()*40-20}px, ${Math.random()*40-20}px) rotate(360deg)` }
+                { transform: `translate(${Math.random()*60-30}px, ${Math.random()*60-30}px) rotate(${Math.random()*360}deg)` }
             ], {
-                duration: 5000 + Math.random() * 5000,
+                duration: 4000 + Math.random() * 6000,
                 iterations: Infinity,
                 direction: 'alternate'
             });
@@ -256,13 +352,24 @@
             symbolContainer.appendChild(sym);
         }
 
-        // Mouse Parallax for Links
+        // Mouse warping Logic (aggressive)
         document.addEventListener('mousemove', (e) => {
-            const x = (e.clientX / window.innerWidth - 0.5) * 20;
-            const y = (e.clientY / window.innerHeight - 0.5) * 20;
-            document.querySelector('.link-grid').style.transform = `translate(${x}px, ${y}px)`;
+            if (document.body.classList.contains('locked')) return;
+            
+            const xVal = (e.clientX / window.innerWidth - 0.5) * 40;
+            const yVal = (e.clientY / window.innerHeight - 0.5) * 40;
+            
+            viewport.style.transform = `translate(${xVal}px, ${yVal}px)`;
+            
+            if (Math.random() > 0.96) {
+                document.getElementById('sinister-title').style.transform = `skewX(${Math.random()*20-10}deg)`;
+                setTimeout(()=> {
+                   document.getElementById('sinister-title').style.transform = `skewX(0deg)`;
+                }, 50);
+            }
         });
 
+        console.log("%cBLOOD PACT ACKNOWLEDGED. AD INFIMUM.", "color: #ff0000; font-size: 20px; font-weight: bold; background: #000; padding: 10px; border: 2px solid #5e0000;");
     </script>
 </body>
 </html>
