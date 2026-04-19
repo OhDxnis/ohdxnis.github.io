@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OHDXNIS</title>
+    <title>OHDXNIS | HELLSCAPE</title>
     <style>
         :root {
-            --bg-deep: #050505;
-            --blood: #4a0000;
-            --glitch-grey: #a1a1a1;
-            --flicker-speed: 0.1s;
+            --bg-deep: #030000;
+            --blood: #7a0000;
+            --dark-blood: #2a0000;
+            --glitch-grey: #888888;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; cursor: crosshair; }
@@ -22,7 +22,6 @@
             height: 100vh;
             width: 100vw;
             text-transform: uppercase;
-            letter-spacing: 0.2em;
         }
 
         /* --- ATMOSPHERIC LAYERS --- */
@@ -32,32 +31,46 @@
             top: 0; left: 0;
             width: 100%; height: 100%;
             background: url('https://upload.wikimedia.org/wikipedia/commons/7/76/1k_Resolution_White_Noise_Video_Frame.png');
-            opacity: 0.04;
+            opacity: 0.05;
             pointer-events: none;
             z-index: 999;
-            animation: noise 0.2s infinite;
+            mix-blend-mode: overlay;
+            animation: noise 0.15s infinite;
         }
 
-        #overlay-tint {
+        .blood-pool {
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            background: radial-gradient(circle, transparent 20%, rgba(0,0,0,0.8) 100%);
-            z-index: 998;
-            pointer-events: none;
+            background: radial-gradient(circle at center, var(--dark-blood) 0%, transparent 80%);
+            opacity: 0.6;
+            z-index: 1;
+            animation: pulse-blood 6s infinite alternate;
         }
 
-        /* --- ANIMATED BACKGROUND --- */
-        
-        .ambience {
+        /* --- OCCULT SYMBOLISM --- */
+
+        .giant-sigil {
             position: absolute;
-            width: 150%; height: 150%;
-            top: -25%; left: -25%;
-            background: radial-gradient(circle at center, var(--blood) 0%, transparent 50%);
-            filter: blur(80px);
-            opacity: 0.15;
-            animation: drift 20s infinite alternate ease-in-out;
-            z-index: 1;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 80vh;
+            color: var(--blood);
+            opacity: 0.03;
+            z-index: 2;
+            pointer-events: none;
+            animation: slow-spin 60s linear infinite;
+            user-select: none;
+        }
+
+        .floating-symbols {
+            position: absolute;
+            width: 100%; height: 100%;
+            z-index: 3;
+            pointer-events: none;
+            font-size: 2rem;
+            color: var(--dark-blood);
+            opacity: 0.3;
         }
 
         /* --- MAIN IDENTITY --- */
@@ -74,121 +87,99 @@
         }
 
         h1 {
-            font-size: 8vw;
+            font-size: 10vw;
             font-weight: 900;
             color: #fff;
-            text-shadow: 2px 2px var(--blood), -2px -2px #00ffff55;
+            letter-spacing: 0.1em;
+            text-shadow: 4px 0px var(--blood), -4px 0px #000;
             filter: url(#glitch);
-            animation: flicker 4s infinite;
+            animation: aggressive-flicker 3s infinite;
             user-select: none;
         }
 
         .subtitle {
-            font-size: 0.8rem;
-            margin-top: 10px;
-            opacity: 0.6;
-            animation: wave 5s infinite;
+            font-size: 1rem;
+            margin-top: -10px;
+            color: var(--blood);
+            letter-spacing: 0.3em;
+            text-shadow: 0px 0px 10px var(--blood);
         }
 
         /* --- LINK MATRIX --- */
         
         .link-matrix {
-            margin-top: 40px;
+            margin-top: 50px;
             display: flex;
-            gap: 25px;
+            gap: 30px;
             flex-wrap: wrap;
             justify-content: center;
             z-index: 20;
+            background: rgba(0,0,0,0.4);
+            padding: 10px 20px;
+            border: 1px solid var(--dark-blood);
+            box-shadow: inset 0 0 20px rgba(122, 0, 0, 0.2);
         }
 
         .link-matrix a {
-            color: var(--glitch-grey);
+            color: #555;
             text-decoration: none;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             font-weight: bold;
             position: relative;
-            transition: all 0.2s ease-in-out;
-            padding: 5px;
+            transition: all 0.1s;
         }
 
         .link-matrix a:hover {
-            color: #ffffff;
-            text-shadow: 2px 0px var(--blood), -2px 0px #00ffff55;
-            animation: text-flicker 0.1s infinite;
+            color: #fff;
+            text-shadow: 2px 2px var(--blood), -2px -2px #000;
+            letter-spacing: 0.1em;
         }
 
         /* --- INTEGRATED MEDIA --- */
 
         .media-shrine {
-            margin-top: 50px;
+            margin-top: 40px;
             width: 300px;
-            filter: grayscale(1) contrast(1.5) invert(1);
-            opacity: 0.3;
-            transition: opacity 0.5s;
+            filter: sepia(1) hue-rotate(320deg) saturate(5) contrast(1.5) opacity(0.4);
+            transition: filter 0.3s, opacity 0.3s;
             z-index: 20;
         }
 
         .media-shrine:hover {
-            opacity: 0.8;
-            filter: grayscale(0.5) contrast(1.2) invert(0);
-        }
-
-        /* --- UI ELEMENTS --- */
-
-        .status-bar {
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            font-size: 10px;
-            line-height: 1.5;
-            color: var(--blood);
-        }
-
-        .interaction-prompt {
-            position: fixed;
-            top: 50%; left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 1000;
-            background: #000;
-            padding: 20px;
-            border: 1px solid var(--blood);
-            cursor: pointer;
-            text-align: center;
+            opacity: 1;
+            filter: sepia(1) hue-rotate(320deg) saturate(2) contrast(1.2);
         }
 
         /* --- ANIMATIONS --- */
 
         @keyframes noise {
             0% { transform: translate(0,0) }
-            10% { transform: translate(-5%,-5%) }
-            20% { transform: translate(-10%,5%) }
-            50% { transform: translate(5%,-10%) }
+            10% { transform: translate(-2%,-2%) }
+            20% { transform: translate(-4%,2%) }
+            50% { transform: translate(2%,-4%) }
             100% { transform: translate(0,0) }
         }
 
-        @keyframes drift {
-            from { transform: rotate(0deg) scale(1); }
-            to { transform: rotate(5deg) scale(1.1); }
+        @keyframes pulse-blood {
+            0% { opacity: 0.3; transform: scale(1); }
+            100% { opacity: 0.7; transform: scale(1.05); }
         }
 
-        @keyframes flicker {
-            0%, 19.999%, 22%, 62.999%, 64%, 64.999%, 70%, 100% { opacity: 0.99; }
-            20%, 21.999%, 63%, 63.999%, 65%, 69.999% { opacity: 0.4; }
+        @keyframes slow-spin {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
         }
 
-        @keyframes wave {
-            0%, 100% { transform: translateX(0); }
-            50% { transform: translateX(10px); }
+        @keyframes aggressive-flicker {
+            0%, 100% { opacity: 1; transform: skew(0deg); }
+            5% { opacity: 0.8; transform: skew(-5deg); }
+            10% { opacity: 1; transform: skew(0deg); }
+            15% { opacity: 0.2; transform: skew(10deg); }
+            20% { opacity: 1; transform: skew(0deg); }
+            80% { opacity: 1; }
+            82% { opacity: 0.5; }
+            84% { opacity: 1; }
         }
-
-        @keyframes text-flicker {
-            0% { opacity: 1; transform: translate(0, 0); }
-            50% { opacity: 0.6; transform: translate(-2px, 1px); }
-            100% { opacity: 1; transform: translate(1px, -1px); }
-        }
-
-        /* HIDDEN ELEMENTS */
-        .hidden { display: none !important; }
 
     </style>
 </head>
@@ -196,7 +187,93 @@
 
     <svg style="position: absolute; width: 0; height: 0;">
         <filter id="glitch">
-            <feTurbulence type="fractalNoise" baseFrequency="0.01" numOctaves="3" result="noise" />
-            <feDisplacementMap in="SourceGraphic" in2="noise" scale="10" />
+            <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="3" result="noise" />
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="15" />
         </filter>
     </svg>
+
+    <div id="vhs-grain"></div>
+    <div class="blood-pool"></div>
+    
+    <div class="giant-sigil">⛧</div>
+
+    <div class="floating-symbols" id="symbols-container"></div>
+
+    <div class="center-container">
+        <h1 id="main-title">OHDXNIS</h1>
+        <p class="subtitle">⸸ NO SALVATION ⸸</p>
+
+        <div class="link-matrix">
+            <a href="#" target="_blank">🜏 SPOTIFY</a>
+            <a href="#" target="_blank">🜏 APPLE MUSIC</a>
+            <a href="#" target="_blank">🜏 SOUNDCLOUD</a>
+            <a href="#" target="_blank">🜏 INSTAGRAM</a>
+            <a href="#" target="_blank">🜏 TWITTER</a>
+        </div>
+
+        <div class="media-shrine">
+            <iframe width="100%" height="20" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/123456789&color=%237a0000&inverse=true&auto_play=false&show_user=false"></iframe>
+        </div>
+    </div>
+
+    <audio id="bg-audio" loop autoplay>
+        <source src="New_Project (45).mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        const audio = document.getElementById('bg-audio');
+        const title = document.getElementById('main-title');
+        const symbolContainer = document.getElementById('symbols-container');
+
+        // AUDIO FIX: Tries to play immediately. If blocked, waits for ANY click on the screen to force it on.
+        audio.volume = 0.6;
+        let playPromise = audio.play();
+        if (playPromise !== undefined) {
+            playPromise.catch(() => {
+                document.body.addEventListener('click', () => {
+                    if(audio.paused) audio.play();
+                }, { once: true });
+            });
+        }
+
+        // MOUSE PARALLAX WARPING
+        document.addEventListener('mousemove', (e) => {
+            const x = (e.clientX / window.innerWidth) - 0.5;
+            const y = (e.clientY / window.innerHeight) - 0.5;
+            
+            if (Math.random() > 0.90) {
+                title.style.transform = `translate(${x * 15}px, ${y * 15}px) skew(${x * 8}deg)`;
+            }
+        });
+
+        // GLITCH INJECTION
+        setInterval(() => {
+            const filter = document.querySelector('#glitch feTurbulence');
+            filter.setAttribute('baseFrequency', `${Math.random() * 0.08}`);
+            
+            if(Math.random() > 0.95) {
+                title.style.letterSpacing = (Math.random() * 15) + 'px';
+                setTimeout(() => title.style.letterSpacing = '0.1em', 100);
+            }
+        }, 80);
+
+        // RANDOM SCATTERED OCCULT SYMBOLS
+        const satanicSymbols = ['⛧', '🜏', '⸸', '†', '𖤐'];
+        
+        for(let i = 0; i < 15; i++) {
+            let sym = document.createElement('div');
+            sym.innerText = satanicSymbols[Math.floor(Math.random() * satanicSymbols.length)];
+            sym.style.position = 'absolute';
+            sym.style.left = Math.random() * 100 + 'vw';
+            sym.style.top = Math.random() * 100 + 'vh';
+            sym.style.fontSize = (Math.random() * 2 + 1) + 'rem';
+            sym.style.opacity = Math.random() * 0.5;
+            sym.style.transform = `rotate(${Math.random() * 360}deg)`;
+            sym.style.filter = 'blur(1px)';
+            symbolContainer.appendChild(sym);
+        }
+
+        console.log("%cBLOOD PACT SEALED", "color: #7a0000; font-size: 24px; font-weight: bold; background: #000; padding: 10px;");
+    </script>
+</body>
+</html>
