@@ -15,62 +15,69 @@ body {
     overflow: hidden;
 }
 
-/* center content */
+/* grain (LOCAL — no external fail) */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+}
+
+/* center */
 .container {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    text-align: center;
 }
 
-/* main name */
+/* main text */
 h1 {
     font-size: 80px;
-    letter-spacing: 10px;
+    letter-spacing: 12px;
     margin: 0;
+    font-weight: 200;
     transition: 0.3s;
 }
 
-/* subtle hover glitch */
 h1:hover {
-    letter-spacing: 20px;
-    opacity: 0.8;
+    letter-spacing: 18px;
+    opacity: 0.7;
 }
 
 /* links */
 .links {
-    margin-top: 30px;
+    margin-top: 25px;
 }
 
 a {
     display: block;
     color: white;
     text-decoration: none;
-    margin: 8px 0;
-    opacity: 0.5;
-    transition: 0.3s;
-    font-size: 14px;
-    letter-spacing: 2px;
+    margin: 10px 0;
+    opacity: 0.4;
+    font-size: 13px;
+    letter-spacing: 3px;
+    transition: 0.2s;
 }
 
 a:hover {
     opacity: 1;
 }
 
-/* background grain effect */
-body::after {
-    content: "";
-    position: absolute;
-    width: 200%;
-    height: 200%;
-    background: url('https://grainy-gradients.vercel.app/noise.svg');
-    opacity: 0.05;
-    animation: move 10s infinite linear;
+/* subtle fade-in */
+.container {
+    animation: fade 1.2s ease-out;
 }
 
-@keyframes move {
-    0% { transform: translate(0,0); }
-    100% { transform: translate(-50px,-50px); }
+@keyframes fade {
+    from { opacity: 0; transform: translate(-50%, -45%); }
+    to { opacity: 1; transform: translate(-50%, -50%); }
 }
 </style>
 </head>
@@ -82,7 +89,7 @@ body::after {
 
     <div class="links">
         <a href="https://soundcloud.com/ohdxnis">SOUNDCLOUD</a>
-        <a href="https://linktr.ee/OhDxnis">ALL LINKS</a>
+        <a href="https://linktr.ee/OhDxnis">LINKS</a>
         <a href="#">YOUTUBE</a>
     </div>
 </div>
