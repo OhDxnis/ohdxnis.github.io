@@ -6,268 +6,267 @@
     <title>OHDXNIS | AD INFINITUM</title>
     <style>
         :root {
-            --black: #000000;
-            --deep-blood: #4a0000;
+            --abyss: #030000;
+            --blood: #9e0000;
             --bright-blood: #ff0000;
-            --gold-corrupt: #444400;
+            --font-main: 'Times New Roman', serif;
+            --font-ui: 'Arial Black', sans-serif;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; cursor: crosshair; }
 
         body, html {
-            background-color: var(--black);
+            background-color: var(--abyss);
             color: #fff;
-            font-family: 'Courier New', monospace;
             overflow: hidden;
             height: 100vh;
             width: 100vw;
         }
 
-        /* --- THE UNLOCK SEAL --- */
-        #ritual-seal {
+        /* --- THE GATEWAY SEAL --- */
+        #ritual-gate {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: #000; z-index: 9999;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             transition: all 1.5s cubic-bezier(0.9, 0, 0.1, 1);
         }
-        #ritual-seal .gate-icon { 
-            font-size: 150px; color: var(--bright-blood); 
-            filter: drop-shadow(0 0 30px var(--bright-blood));
-            animation: gate-pulse 0.6s infinite alternate;
-            cursor: pointer;
+        .gate-trigger {
+            font-size: 180px; color: var(--bright-blood);
+            filter: drop-shadow(0 0 40px var(--blood));
+            animation: ritual-pulse 0.5s infinite alternate;
+            cursor: pointer; user-select: none;
         }
-        #ritual-seal p { color: var(--bright-blood); margin-top: 20px; letter-spacing: 10px; font-weight: bold; }
+        #ritual-gate p { color: #fff; letter-spacing: 12px; font-size: 0.7rem; margin-top: 30px; opacity: 0.6; }
 
-        /* --- THE ABYSS CANVAS --- */
+        /* --- THE ESOTERIC ENGINE --- */
         #abyss-canvas {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             z-index: 1; pointer-events: none;
         }
 
-        /* --- VIEWPORT ARCHITECTURE --- */
+        .motion-blur-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle, transparent 20%, rgba(0,0,0,0.8) 100%);
+            z-index: 2; pointer-events: none;
+        }
+
+        /* --- UI VIEWPORT --- */
         .viewport {
             position: relative; z-index: 10;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
             height: 100vh; width: 100vw;
-            opacity: 0; transform: scale(1.2);
-            transition: opacity 3s ease, transform 5s ease;
+            opacity: 0; filter: blur(20px);
+            transition: opacity 2s ease, filter 3s ease;
         }
 
-        /* EXTREME DISTORTION TITLE */
-        .header-ritual { text-align: center; margin-bottom: 30px; filter: url(#chaos-filter); }
+        /* VIOLENT DISTORTION TITLE */
+        .title-ritual { text-align: center; margin-bottom: 20px; filter: url(#vibration-filter); }
         
-        h1#main-title {
-            font-family: 'Times New Roman', serif;
-            font-size: 16vw;
+        h1#sinister-title {
+            font-family: var(--font-main);
+            font-size: 18vw;
             font-weight: 900;
             font-style: italic;
+            letter-spacing: -12px;
             color: #fff;
-            text-shadow: 8px 8px 0px var(--deep-blood), -2px -2px 20px var(--bright-blood);
-            letter-spacing: -10px;
-            animation: violent-vibration 0.1s infinite;
+            text-shadow: 10px 10px 0px var(--blood), -4px -4px 0px #000;
+            animation: violent-vibe 0.05s infinite;
         }
 
         .subtitle {
             color: var(--bright-blood);
-            font-size: 1.5rem;
-            letter-spacing: 2rem;
-            text-shadow: 0 0 15px var(--bright-blood);
-            margin-top: -20px;
-            font-weight: 900;
+            font-size: 1.4rem;
+            letter-spacing: 2.2rem;
+            font-weight: bold;
+            margin-top: -40px;
+            text-shadow: 0 0 20px var(--bright-blood);
         }
 
-        /* --- THE MATRIX OF ALTARS --- */
-        .grid-container {
+        /* --- THE NODES (SHARP & READABLE) --- */
+        .link-altar {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 15px;
-            z-index: 20;
-        }
-
-        .altar-box {
-            background: rgba(0, 0, 0, 0.95);
-            border: 1px solid var(--deep-blood);
-            padding: 30px;
-            text-decoration: none;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            position: relative;
-            transition: 0.1s;
-        }
-
-        .altar-box .sigil-icon {
-            font-size: 3.5rem;
-            color: var(--bright-blood);
-            margin-bottom: 10px;
-            filter: url(#chaos-filter); /* ICONS DISTORTED */
-            animation: slow-sway 3s infinite alternate;
-        }
-
-        /* READABLE NAMES: NO DISTORTION */
-        .altar-box .label {
-            color: #ffffff;
-            font-family: 'Arial', sans-serif;
-            font-size: 0.8rem;
-            font-weight: 900;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            filter: none !important; /* Forces clarity */
-        }
-
-        .altar-box:hover {
-            background: var(--deep-blood);
-            border-color: #fff;
-            transform: scale(1.1) rotate(2deg);
             z-index: 50;
         }
 
-        /* --- SVG CHAOS FILTERS --- */
-        svg.filter-bank { position: absolute; width: 0; height: 0; }
-
-        @keyframes gate-pulse { from { transform: scale(1); opacity: 0.4; } to { transform: scale(1.1); opacity: 1; } }
-        @keyframes violent-vibration {
-            0% { transform: translate(0,0); }
-            25% { transform: translate(-2px, 2px); }
-            50% { transform: translate(2px, -2px); }
-            75% { transform: translate(-1px, -1px); }
-            100% { transform: translate(1px, 1px); }
+        .node {
+            background: rgba(0,0,0,0.9);
+            border: 1px solid #300;
+            padding: 25px 40px;
+            text-decoration: none;
+            display: flex; flex-direction: column; align-items: center;
+            transition: 0.1s;
+            position: relative;
         }
-        @keyframes slow-sway { from { transform: rotate(-5deg); } to { transform: rotate(5deg); } }
 
+        .node .sigil {
+            font-size: 3rem; color: var(--blood);
+            margin-bottom: 10px;
+            filter: url(#vibration-filter);
+        }
+
+        /* SHARP LABELS - NO DISTORTION */
+        .node .label {
+            color: #ffffff;
+            font-family: var(--font-ui);
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 0px #000;
+            filter: none !important;
+            white-space: nowrap;
+        }
+
+        .node:hover {
+            border-color: #fff;
+            background: var(--blood);
+            transform: scale(1.1) rotate(3deg);
+        }
+        .node:hover .label { color: #fff; }
+
+        /* --- SVG FILTERS --- */
+        svg.ritual-filters { position: absolute; width: 0; height: 0; }
+
+        @keyframes ritual-pulse { from { transform: scale(1); opacity: 0.5; } to { transform: scale(1.1); opacity: 1; } }
+        @keyframes violent-vibe {
+            0% { transform: translate(1px, 1px); }
+            50% { transform: translate(-1px, -1px); }
+            100% { transform: translate(1px, -1px); }
+        }
     </style>
 </head>
 <body>
 
-    <div id="ritual-seal" onclick="breakSeal()">
-        <div class="gate-icon">⛧</div>
-        <p>CLICK TO BLEED</p>
+    <div id="ritual-gate" onclick="awaken()">
+        <div class="gate-trigger">⛧</div>
+        <p>INITIATE AD INFINITUM</p>
     </div>
 
-    <svg class="filter-bank">
-        <filter id="chaos-filter">
-            <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="3" result="noise">
-                <animate attributeName="baseFrequency" values="0.9;0.95;0.9" dur="0.1s" repeatCount="indefinite" />
+    <svg class="ritual-filters">
+        <filter id="vibration-filter">
+            <feTurbulence type="fractalNoise" baseFrequency="0.01" numOctaves="3" result="noise">
+                <animate attributeName="baseFrequency" values="0.01;0.05;0.01" dur="0.1s" repeatCount="indefinite" />
             </feTurbulence>
             <feDisplacementMap in="SourceGraphic" in2="noise" scale="15" />
         </filter>
     </svg>
 
     <canvas id="abyss-canvas"></canvas>
+    <div class="motion-blur-overlay"></div>
 
     <div class="viewport" id="ui">
-        <div class="header-ritual">
-            <h1 id="main-title">OHDXNIS</h1>
+        <div class="title-ritual">
+            <h1 id="sinister-title">OHDXNIS</h1>
             <p class="subtitle">AD INFINITUM</p>
         </div>
 
-        <div class="grid-container">
-            <a href="https://it.wikipedia.org/wiki/Utente:Denis.Gjoka00/Sandbox" target="_blank" class="altar-box">
-                <span class="sigil-icon">🜏</span><span class="label">Wikipedia</span></a>
-            <a href="https://genius.com/artists/Ohdxnis" target="_blank" class="altar-box">
-                <span class="sigil-icon">𖤐</span><span class="label">Genius</span></a>
-            <a href="https://www.youtube.com/@OhDxnis" target="_blank" class="altar-box">
-                <span class="sigil-icon">⸸</span><span class="label">YouTube</span></a>
-            <a href="https://ohdxnis.fandom.com/wiki/OhDxnis!_Wiki" target="_blank" class="altar-box">
-                <span class="sigil-icon">⛧</span><span class="label">Wiki Fandom</span></a>
-            <a href="https://www.tiktok.com/@nerd.alt" target="_blank" class="altar-box">
-                <span class="sigil-icon">🜍</span><span class="label">TikTok</span></a>
-            <a href="https://www.instagram.com/denis.gjoka_/" target="_blank" class="altar-box">
-                <span class="sigil-icon">🜕</span><span class="label">Instagram</span></a>
-            <a href="https://soundcloud.com/ohdxnis" target="_blank" class="altar-box">
-                <span class="sigil-icon">🜓</span><span class="label">Soundcloud</span></a>
-            <a href="https://open.spotify.com/artist/4U3Ylg19PV91nwShOuFFGR" target="_blank" class="altar-box">
-                <span class="sigil-icon">🜖</span><span class="label">Spotify</span></a>
-            <a href="https://open.spotify.com/show/6XWs4fWUVKMWPl3Vl8ejFx" target="_blank" class="altar-box">
-                <span class="sigil-icon">🜗</span><span class="label">Mixtape</span></a>
+        <div class="link-altar">
+            <a href="https://it.wikipedia.org/wiki/Utente:Denis.Gjoka00/Sandbox" target="_blank" class="node">
+                <span class="sigil">🜏</span><span class="label">Wikipedia</span></a>
+            <a href="https://genius.com/artists/Ohdxnis" target="_blank" class="node">
+                <span class="sigil">𖤐</span><span class="label">Genius</span></a>
+            <a href="https://www.youtube.com/@OhDxnis" target="_blank" class="node">
+                <span class="sigil">⸸</span><span class="label">YouTube</span></a>
+            <a href="https://ohdxnis.fandom.com/wiki/OhDxnis!_Wiki" target="_blank" class="node">
+                <span class="sigil">⛧</span><span class="label">Wiki Fandom</span></a>
+            <a href="https://www.tiktok.com/@nerd.alt" target="_blank" class="node">
+                <span class="sigil">🜔</span><span class="label">TikTok</span></a>
+            <a href="https://www.instagram.com/denis.gjoka_/" target="_blank" class="node">
+                <span class="sigil">🜕</span><span class="label">Instagram</span></a>
+            <a href="https://soundcloud.com/ohdxnis" target="_blank" class="node">
+                <span class="sigil">🜍</span><span class="label">Soundcloud</span></a>
+            <a href="https://open.spotify.com/artist/4U3Ylg19PV91nwShOuFFGR" target="_blank" class="node">
+                <span class="sigil">🜖</span><span class="label">Spotify</span></a>
+            <a href="https://open.spotify.com/show/6XWs4fWUVKMWPl3Vl8ejFx" target="_blank" class="node">
+                <span class="sigil">🜗</span><span class="label">Mixtape</span></a>
         </div>
     </div>
 
-    <audio id="audio-track" loop>
-        <source src="Bleood type beat wires.mp3" type="audio/mpeg">
+    <audio id="abyss-audio" loop>
+        <source src="Bleood&nbsp; type beat wires.mp3" type="audio/mpeg">
     </audio>
 
     <script>
-        const audio = document.getElementById('audio-track');
+        const audio = document.getElementById('abyss-audio');
         const canvas = document.getElementById('abyss-canvas');
         const ctx = canvas.getContext('2d');
-        let width, height;
-        let bloodDrops = [];
-        let esotericFloating = [];
+        let width, height, frame = 0;
+        let esotericShapes = [];
 
         function init() {
             width = canvas.width = window.innerWidth;
             height = canvas.height = window.innerHeight;
             
-            // Generate massive amounts of blood
-            for(let i=0; i<150; i++) {
-                bloodDrops.push({
+            const chars = ['⛧', '🜏', '⸸', '𖤐', '🜓', '🜕', '🜔', '🜍'];
+            for(let i=0; i<80; i++) {
+                esotericShapes.push({
                     x: Math.random() * width,
                     y: Math.random() * height,
-                    h: Math.random() * 100 + 50,
-                    w: Math.random() * 3 + 1,
-                    s: Math.random() * 8 + 4
-                });
-            }
-            
-            // Generate floating sigils
-            const icons = ['⛧', '🜏', '⸸', '𖤐', '🜓', '🜕', '🜔', '🜍'];
-            for(let i=0; i<60; i++) {
-                esotericFloating.push({
-                    x: Math.random() * width,
-                    y: Math.random() * height,
-                    char: icons[Math.floor(Math.random()*icons.length)],
-                    vX: (Math.random() - 0.5) * 4,
-                    vY: (Math.random() - 0.5) * 4,
-                    o: Math.random() * 0.5
+                    char: chars[Math.floor(Math.random()*chars.length)],
+                    s: Math.random() * 40 + 10,
+                    vX: (Math.random() - 0.5) * 2,
+                    vY: Math.random() * 5 + 2,
+                    o: Math.random() * 0.3
                 });
             }
         }
 
         function draw() {
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.2)'; // Motion blur trail
+            // Feedback Motion Blur
+            ctx.fillStyle = 'rgba(3, 0, 0, 0.15)';
             ctx.fillRect(0, 0, width, height);
+            
+            frame++;
 
-            // Draw Blood
-            ctx.fillStyle = '#ff0000';
-            bloodDrops.forEach(d => {
-                ctx.fillRect(d.x, d.y, d.w, d.h);
-                d.y += d.s;
-                if(d.y > height) { d.y = -100; d.x = Math.random() * width; }
-            });
+            // Draw Central Alchemical Geometry (Esoteric Detail)
+            ctx.save();
+            ctx.translate(width/2, height/2);
+            ctx.rotate(frame * 0.005);
+            ctx.strokeStyle = 'rgba(158, 0, 0, 0.1)';
+            ctx.lineWidth = 2;
+            for(let i=0; i<3; i++) {
+                ctx.rotate(Math.PI / 3);
+                ctx.strokeRect(-200, -200, 400, 400);
+            }
+            ctx.restore();
 
-            // Draw floating sigils
-            esotericFloating.forEach(p => {
+            // Draw Falling Sigils & Veins
+            esotericShapes.forEach(p => {
                 ctx.fillStyle = `rgba(255, 0, 0, ${p.o})`;
-                ctx.font = '30px serif';
+                ctx.font = `${p.s}px serif`;
                 ctx.fillText(p.char, p.x, p.y);
-                p.x += p.vX; p.y += p.vY;
+                
+                // Vein effect
+                if(Math.random() > 0.98) {
+                    ctx.strokeStyle = 'rgba(255,0,0,0.05)';
+                    ctx.beginPath();
+                    ctx.moveTo(p.x, p.y);
+                    ctx.lineTo(p.x + (Math.random()*100-50), p.y + 100);
+                    ctx.stroke();
+                }
+
+                p.y += p.vY;
+                p.x += p.vX;
+                if(p.y > height) p.y = -50;
                 if(p.x < 0 || p.x > width) p.vX *= -1;
-                if(p.y < 0 || p.y > height) p.vY *= -1;
             });
 
             requestAnimationFrame(draw);
         }
 
-        function breakSeal() {
-            // Unlocking Audio
-            audio.volume = 1.0;
-            audio.play().then(() => {
-                console.log("Audio flowing...");
-            }).catch(e => {
-                console.error("Audio block:", e);
-                // Fallback for some browsers: try playing again
-                audio.play();
-            });
-
-            // Transition UI
-            document.getElementById('ritual-seal').style.opacity = '0';
-            document.getElementById('ritual-seal').style.transform = 'scale(5) rotate(45deg)';
+        function awaken() {
+            // Force Audio Play
+            audio.play().catch(e => console.log("Audio trigger blocked. Check filename: ", e));
+            
+            // Fade the Seal
+            document.getElementById('ritual-gate').style.opacity = '0';
+            document.getElementById('ritual-gate').style.transform = 'scale(0.1) rotate(720deg)';
+            
             setTimeout(() => {
-                document.getElementById('ritual-seal').style.display = 'none';
+                document.getElementById('ritual-gate').style.display = 'none';
                 document.getElementById('ui').style.opacity = '1';
-                document.getElementById('ui').style.transform = 'scale(1)';
-            }, 1000);
+                document.getElementById('ui').style.filter = 'blur(0px)';
+            }, 1200);
 
             init();
             draw();
@@ -275,12 +274,11 @@
 
         window.addEventListener('resize', init);
 
-        // Mouse Parallax
+        // Mouse Parallax Distortion
         document.addEventListener('mousemove', (e) => {
-            const x = (e.clientX / width - 0.5) * 50;
-            const y = (e.clientY / height - 0.5) * 50;
-            document.getElementById('ui').style.marginLeft = x + 'px';
-            document.getElementById('ui').style.marginTop = y + 'px';
+            const x = (e.clientX / width - 0.5) * 40;
+            const y = (e.clientY / height - 0.5) * 40;
+            document.getElementById('ui').style.transform = `translate(${x}px, ${y}px)`;
         });
     </script>
 </body>
