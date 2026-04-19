@@ -6,386 +6,290 @@
     <title>OHDXNIS | AD INFINITUM</title>
     <style>
         :root {
-            --abyss: #010000;
+            --abyss: #020000;
+            --blood: #660000;
             --fresh-blood: #ff0000;
-            --dried-blood: #3d0000;
-            --tech-cyan: #0ff;
-            --viscera: #120000;
-            /* Using a built-in distressed alternative (Garamond is standard, but styled to be sharp and raw) */
-            --font-display: 'Palatino Linotype', 'Book Antiqua', Palatino, serif; 
-            --font-ui: 'Courier New', Courier, monospace;
+            --ui-white: #ffffff;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: crosshair; }
 
         body, html {
-            background-color: var(--abyss);
+            background-color: #000;
             color: #fff;
-            font-family: var(--font-ui);
+            font-family: 'Courier New', monospace;
             overflow: hidden;
             height: 100vh;
             width: 100vw;
             text-transform: uppercase;
         }
 
-        /* --- ATMOSPHERIC LAYERS --- */
-        #grain {
+        /* --- THE INFERNAL SEAL (Click to Start) --- */
+        #ritual-seal {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: url('https://upload.wikimedia.org/wikipedia/commons/7/76/1k_Resolution_White_Noise_Video_Frame.png');
-            opacity: 0.12; pointer-events: none; z-index: 100; animation: noise 0.08s infinite;
+            background: #000; z-index: 9999;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            transition: opacity 1.2s cubic-bezier(0.4, 0, 1, 1), visibility 1.2s;
         }
+        #ritual-seal .seal-icon { font-size: 120px; color: var(--blood); animation: seal-pulse 2s infinite; }
+        #ritual-seal p { color: var(--fresh-blood); font-size: 0.7rem; letter-spacing: 5px; margin-top: 20px; }
 
-        /* Blood Drips, Trails, and Particle Layers */
-        #blood-canvas, #symbol-canvas, #cursor-canvas {
+        /* --- BACKGROUND LAYERS --- */
+        #chaos-canvas {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; z-index: 5;
+            z-index: 1; pointer-events: none;
         }
 
-        /* Viscera (Gore-like blur effect in background) */
-        #viscera-pulse {
-            position: fixed; top: -50%; left: -50%; width: 200%; height: 200%;
-            background: radial-gradient(circle, var(--dried-blood) 0%, transparent 70%);
-            opacity: 0.3; z-index: 1; animation: visceral-swell 10s infinite;
+        .blood-vignette {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle, transparent 40%, rgba(50, 0, 0, 0.8) 100%);
+            z-index: 2; pointer-events: none;
         }
 
-        /* --- MAIN UI CONTAINER --- */
+        /* --- CONTENT VIEWPORT --- */
         .viewport {
-            position: relative;
-            z-index: 20;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            width: 100vw;
-            text-align: center;
-            padding: 20px;
+            position: relative; z-index: 10;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            height: 100vh; width: 100vw;
+            opacity: 0; transition: opacity 2s ease;
         }
 
-        /* --- THE TITLE: SINISTER & UNHINGED --- */
-        .title-ritual {
-            filter: url(#melting-title); /* Complex melting effect */
-            margin-bottom: 2vh;
-            position: relative;
-        }
-
-        h1#sinister-title {
-            font-family: var(--font-display);
-            font-size: 15vw; /* Extremely Aggressive Size */
+        /* SINISTER TITLE: FRAXURED & JAGGED */
+        .title-block { text-align: center; margin-bottom: 5vh; }
+        
+        h1#ritual-title {
+            font-family: 'Times New Roman', serif;
+            font-size: 13vw;
             font-weight: 900;
-            letter-spacing: -0.1em;
+            font-style: italic;
+            letter-spacing: -8px;
             color: #fff;
-            text-shadow: 0 0 30px var(--fresh-blood), 0 0 50px #fff;
-            animation: vicious-shake 4s infinite alternate;
+            line-height: 0.8;
+            text-shadow: 6px 6px 0px var(--blood), -2px -2px 0px #000;
+            filter: url(#fracture-filter);
+            animation: violent-shake 5s infinite;
         }
 
-        /* Title Glitch Duplicates */
-        h1#sinister-title::before {
-            content: 'OHDXNIS'; position: absolute; top: 0; left: -3px;
-            color: var(--tech-cyan); opacity: 0.2; z-index: -1; animation: title-glitch 0.2s infinite;
-        }
-        h1#sinister-title::after {
-            content: 'OHDXNIS'; position: absolute; top: 0; left: 3px;
-            color: var(--fresh-blood); opacity: 0.3; z-index: -1; animation: title-glitch 0.3s infinite reverse;
-        }
-
-        .wires-subtitle {
-            font-size: 1.1rem;
+        .subtitle {
             color: var(--fresh-blood);
-            letter-spacing: 0.8em;
-            margin-top: -30px;
+            font-size: 1.1rem;
+            letter-spacing: 1.2rem;
+            margin-top: 10px;
             text-shadow: 0 0 15px var(--fresh-blood);
-            animation: breathe 3s infinite;
             font-weight: bold;
         }
 
-        /* --- LEGIBLE LINK GRID --- */
+        /* --- LEGIBLE LINK MATRIX --- */
         .link-grid {
-            margin-top: 50px;
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            z-index: 30;
-            filter: none !important; /* Forces NO distortion on entire grid */
-            perspective: 800px;
+            gap: 15px;
+            z-index: 20;
+            max-width: 1000px;
         }
 
-        @media (max-width: 600px) { .link-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; } }
-
-        .ritual-block {
+        .altar-link {
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid #220000;
+            padding: 25px 35px;
             text-decoration: none;
-            color: #fff;
-            background: rgba(0,0,0,0.7);
-            border: 1px solid rgba(139, 0, 0, 0.2); /* var(--dried-blood) */
-            padding: 15px;
-            transition: 0.1s;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            position: relative;
+            transition: 0.1s ease;
         }
 
-        /* Legible labels: Removed all distortion */
-        .ritual-block .name {
-            font-family: var(--font-ui);
-            font-size: 0.75rem;
-            letter-spacing: 0.1em;
-            color: #ccc;
-            filter: none !important; /* Crucial: ensures clean text */
-            text-shadow: none !important;
+        .altar-link .sigil { 
+            font-size: 2.2rem; 
+            color: var(--blood); 
+            margin-bottom: 8px; 
+            transition: color 0.1s, transform 0.1s;
+        }
+        
+        /* THE NAMES: ZERO DISTORTION - HIGH READABILITY */
+        .altar-link .label {
+            color: var(--ui-white);
+            font-family: 'Courier New', monospace;
+            font-size: 0.7rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            filter: none !important; /* Block any parent filters */
             opacity: 1;
-            transform: none !important;
-            transition: color 0.1s;
         }
 
-        /* Esoteric Icon */
-        .ritual-block .sigil {
-            font-size: 2.5rem;
-            margin-bottom: 5px;
-            color: var(--dried-blood);
-            transition: 0.1s;
-        }
-
-        /* Hover Interaction */
-        .ritual-block:hover {
-            color: #fff;
+        .altar-link:hover {
             border-color: var(--fresh-blood);
-            background: var(--dried-blood);
-            transform: translateZ(20px) scale(1.05);
-            box-shadow: 0 0 30px rgba(255, 0, 0, 0.5);
+            background: #150000;
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.4);
         }
 
-        .ritual-block:hover .sigil {
+        .altar-link:hover .sigil {
             color: #fff;
-            animation: vicious-shake 0.1s infinite;
-            text-shadow: 0 0 10px #fff;
+            transform: scale(1.2) rotate(5deg);
         }
 
-        .ritual-block:hover .name {
-            color: #fff;
-        }
-
-        /* --- AUDIO MASK (Seal) --- */
-        #ritual-mask {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--abyss); z-index: 1000;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            cursor: pointer; transition: opacity 1.5s ease-in-out, visibility 1.5s;
-        }
-        #ritual-mask p { color: var(--fresh-blood); font-size: 10px; letter-spacing: 8px; animation: flicker 0.1s infinite; }
-        .ritual-mask.unmasked { opacity: 0; visibility: hidden; }
-
-        /* --- FILTERS & ANIMATIONS --- */
+        /* --- ANIMATIONS & FILTERS --- */
+        @keyframes seal-pulse { 0%, 100% { opacity: 0.5; transform: scale(1); } 50% { opacity: 1; transform: scale(1.1); } }
         
-        @keyframes noise { 0% { transform: translate(0,0) } 50% { transform: translate(-3%, 3%) } 100% { transform: translate(1%, -1%) } }
-        
-        @keyframes title-glitch {
-            0% { transform: translate(0); }
-            20% { transform: translate(-3px, 2px); }
-            40% { transform: translate(-3px, -2px); }
-            60% { transform: translate(3px, 2px); }
-            80% { transform: translate(3px, -2px); }
-            100% { transform: translate(0); }
+        @keyframes violent-shake {
+            0%, 100% { transform: translate(0,0); }
+            1% { transform: translate(-5px, 2px) skewX(5deg); }
+            2% { transform: translate(5px, -2px) skewX(-5deg); }
+            3% { transform: translate(0,0); }
         }
 
-        @keyframes visceral-swell { 0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.2; } 50% { transform: translate(-50%, -50%) scale(1.1); opacity: 0.4; } }
-        
-        @keyframes vicious-shake {
-            0%, 100% { transform: translateX(0); }
-            5% { transform: translateX(3px) skewX(2deg); }
-            10% { transform: translateX(-3px) skewX(-2deg); }
-            80% { transform: translateX(0); }
-            81% { transform: scaleY(1.1); filter: invert(1); }
-            82% { transform: scaleY(1); filter: invert(0); }
-        }
-
-        @keyframes breathe { 0%, 100% { opacity: 0.3; transform: scale(1); } 50% { opacity: 1; transform: scale(1.05); } }
-        @keyframes flicker { 0% { opacity: 0.3; } 100% { opacity: 1; } }
-
-        svg.ritual-engine { position: absolute; width: 0; height: 0; }
+        svg { position: absolute; width: 0; height: 0; }
     </style>
 </head>
-<body onclick="startRitual()">
+<body onclick="descend()">
 
-    <div id="ritual-mask">
-        <p>[ CLICK TO AWAKEN THE WIRES ]</p>
+    <div id="ritual-seal">
+        <div class="seal-icon">⛧</div>
+        <p>AWAKEN THE WIRES</p>
     </div>
 
-    <svg class="ritual-engine">
-        <filter id="melting-title" x="-20%" y="-20%" width="140%" height="140%">
-            <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="4" result="noise" />
-            <feDisplacementMap in="SourceGraphic" in2="noise" scale="25" />
-            <feGaussianBlur in="SourceGraphic" stdDeviation="1.5" result="blur" />
-            <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 20 -10" result="goo" />
-            <feBlend in="SourceGraphic" in2="goo" mode="normal" />
+    <svg>
+        <filter id="fracture-filter">
+            <feTurbulence type="fractalNoise" baseFrequency="0.08" numOctaves="1" result="noise" />
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="8" />
         </filter>
     </svg>
 
-    <div id="grain"></div>
-    <div id="viscera-pulse"></div>
-    <canvas id="blood-canvas"></canvas> <canvas id="symbol-canvas"></canvas> <canvas id="cursor-canvas"></canvas> <div class="viewport">
-        <div class="title-ritual">
-            <h1 id="sinister-title">OHDXNIS</h1>
+    <canvas id="chaos-canvas"></canvas>
+    <div class="blood-vignette"></div>
+
+    <div class="viewport" id="ui-container">
+        <div class="title-block">
+            <h1 id="ritual-title">OHDXNIS</h1>
+            <p class="subtitle">AD INFINITUM</p>
         </div>
-        <p class="wires-subtitle">⸸ WIRES OF HELL ⸸ DESCEND</p>
 
         <div class="link-grid">
-            <a href="https://it.wikipedia.org/wiki/Utente:Denis.Gjoka00/Sandbox" target="_blank" class="ritual-block">
-                <span class="sigil">🜏</span><span class="name">Wikipedia</span></a>
-            <a href="https://genius.com/artists/Ohdxnis" target="_blank" class="ritual-block">
-                <span class="sigil">𖤐</span><span class="name">Genius</span></a>
-            <a href="https://www.youtube.com/@OhDxnis" target="_blank" class="ritual-block">
-                <span class="sigil">⸸</span><span class="name">Youtube</span></a>
-            <a href="https://ohdxnis.fandom.com/wiki/OhDxnis!_Wiki" target="_blank" class="ritual-block">
-                <span class="sigil">⛧</span><span class="name">Wiki Fandom</span></a>
-            <a href="https://www.tiktok.com/@nerd.alt" target="_blank" class="ritual-block">
-                <span class="sigil">🜔</span><span class="name">TikTok</span></a>
-            <a href="https://www.instagram.com/denis.gjoka_/" target="_blank" class="ritual-block">
-                <span class="sigil">🜕</span><span class="name">Instagram</span></a>
-            <a href="https://soundcloud.com/ohdxnis" target="_blank" class="ritual-block">
-                <span class="sigil">🜍</span><span class="name">Soundcloud</span></a>
-            <a href="https://open.spotify.com/artist/4U3Ylg19PV91nwShOuFFGR" target="_blank" class="ritual-block">
-                <span class="sigil">🜖</span><span class="name">Spotify</span></a>
-            <a href="https://open.spotify.com/show/6XWs4fWUVKMWPl3Vl8ejFx" target="_blank" class="ritual-block">
-                <span class="sigil">🜗</span><span class="name">Mixtape</span></a>
+            <a href="https://it.wikipedia.org/wiki/Utente:Denis.Gjoka00/Sandbox" target="_blank" class="altar-link">
+                <span class="sigil">🜏</span><span class="label">Wikipedia</span></a>
+            <a href="https://genius.com/artists/Ohdxnis" target="_blank" class="altar-link">
+                <span class="sigil">𖤐</span><span class="label">Genius</span></a>
+            <a href="https://www.youtube.com/@OhDxnis" target="_blank" class="altar-link">
+                <span class="sigil">⸸</span><span class="label">YouTube</span></a>
+            <a href="https://ohdxnis.fandom.com/wiki/OhDxnis!_Wiki" target="_blank" class="altar-link">
+                <span class="sigil">🜔</span><span class="label">Wiki Fandom</span></a>
+            <a href="https://www.tiktok.com/@nerd.alt" target="_blank" class="altar-link">
+                <span class="sigil">🜍</span><span class="label">TikTok</span></a>
+            <a href="https://www.instagram.com/denis.gjoka_/" target="_blank" class="altar-link">
+                <span class="sigil">🜕</span><span class="label">Instagram</span></a>
+            <a href="https://soundcloud.com/ohdxnis" target="_blank" class="altar-link">
+                <span class="sigil">🜓</span><span class="label">Soundcloud</span></a>
+            <a href="https://open.spotify.com/artist/4U3Ylg19PV91nwShOuFFGR" target="_blank" class="altar-link">
+                <span class="sigil">🜖</span><span class="label">Spotify</span></a>
+            <a href="https://open.spotify.com/show/6XWs4fWUVKMWPl3Vl8ejFx" target="_blank" class="altar-link">
+                <span class="sigil">🜗</span><span class="label">Mixtape</span></a>
         </div>
     </div>
 
-    <audio id="bg-audio" loop>
+    <audio id="wire-audio" loop>
         <source src="Bleood type beat wires.mp3" type="audio/mpeg">
     </audio>
 
     <script>
-        const audio = document.getElementById('bg-audio');
-        const mask = document.getElementById('ritual-mask');
-        const bCanvas = document.getElementById('blood-canvas');
-        const sCanvas = document.getElementById('symbol-canvas');
-        const cCanvas = document.getElementById('cursor-canvas');
-        const bCtx = bCanvas.getContext('2d');
-        const sCtx = sCanvas.getContext('2d');
-        const cCtx = cCanvas.getContext('2d');
+        const audio = document.getElementById('wire-audio');
+        const seal = document.getElementById('ritual-seal');
+        const ui = document.getElementById('ui-container');
+        const canvas = document.getElementById('chaos-canvas');
+        const ctx = canvas.getContext('2d');
 
         let width, height;
         let bloodDrops = [];
-        let esotericSigils = [];
-        let mouse = { x: -200, y: -200 };
-        const satanicUnicode = ['⛧', '🜏', '⸸', '†', '𖤐', '🜓', '🜕', '🜔', '🜍', '🜎', '🜏', '✕', '🜚'];
+        let chaosParticles = [];
+        let mouse = { x: -100, y: -100 };
+        const satanicSymbols = ['⛧', '🜏', '⸸', '𖤐', '†'];
 
-        function resize() {
-            width = window.innerWidth;
-            height = window.innerHeight;
-            bCanvas.width = width; bCanvas.height = height;
-            sCanvas.width = width; sCanvas.height = height;
-            cCanvas.width = width; cCanvas.height = height;
-        }
-        window.onresize = resize;
-        resize();
-
-        function startRitual() {
-            audio.volume = 0.8;
-            audio.play();
-            mask.classList.add('unmasked');
+        function init() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
             
-            // Initiate all motion engines
-            initBloodEngine(90); // 90 drips
-            initSigilDecay(50);   // 50 sigils
-            animate();
-        }
-
-        // --- BLOOD DROP ENGINE ---
-        function initBloodEngine(count) {
-            for(let i = 0; i < count; i++) {
+            // Blood Engine Setup
+            for(let i=0; i<100; i++) {
                 bloodDrops.push({
                     x: Math.random() * width,
                     y: Math.random() * height,
-                    s: Math.random() * 4 + 1.5,
-                    l: Math.random() * 30 + 10,
-                    w: Math.random() * 2 + 1,
-                    v: Math.random() * 0.4 + 0.1 // speed variability
+                    len: Math.random() * 50 + 20,
+                    spd: Math.random() * 4 + 2,
+                    w: Math.random() * 2 + 1
                 });
             }
-        }
 
-        // --- FLOATING SIGIL DECAY ENGINE ---
-        function initSigilDecay(count) {
-            for(let i = 0; i < count; i++) {
-                esotericSigils.push({
+            // Chaos Particle Setup
+            for(let i=0; i<30; i++) {
+                chaosParticles.push({
                     x: Math.random() * width,
                     y: Math.random() * height,
-                    char: satanicUnicode[Math.floor(Math.random()*satanicUnicode.length)],
-                    fs: Math.random() * 2.5 + 0.5 + 'rem',
-                    op: Math.random() * 0.4 + 0.05,
-                    vx: Math.random()*2 - 1,
-                    vy: Math.random()*2 - 1,
-                    rot: Math.random() * 360,
-                    rs: Math.random()*2 - 1
+                    char: satanicSymbols[Math.floor(Math.random()*satanicSymbols.length)],
+                    vX: (Math.random() - 0.5) * 2,
+                    vY: (Math.random() - 0.5) * 2,
+                    size: Math.random() * 20 + 10
                 });
             }
         }
 
-        // --- MASTER ANIMATION LOOP ---
-        function animate() {
-            if(!mask.classList.contains('unmasked')) return;
-            
-            // 1. CLEAR CANVAS
-            bCtx.clearRect(0, 0, width, height);
-            sCtx.clearRect(0, 0, width, height);
-            
-            // 2. DRAW BLOOD
-            bCtx.fillStyle = '#600'; // dried blood look for back drips
+        function draw() {
+            ctx.clearRect(0, 0, width, height);
+
+            // Draw Blood Drips
+            ctx.fillStyle = '#4a0000';
             bloodDrops.forEach(d => {
-                bCtx.fillRect(d.x, d.y, d.w, d.l);
-                d.y += d.s;
-                if(d.y > height) { d.y = -20; d.x = Math.random() * width; }
+                ctx.fillRect(d.x, d.y, d.w, d.len);
+                d.y += d.spd;
+                if(d.y > height) { d.y = -60; d.x = Math.random() * width; }
             });
 
-            // 3. DRAW FLOATING ESOTERISM
-            esotericSigils.forEach(s => {
-                sCtx.save();
-                sCtx.translate(s.x, s.y);
-                sCtx.rotate(s.rot * Math.PI / 180);
-                sCtx.fillStyle = `rgba(139, 0, 0, ${s.op})`; // dried blood
-                sCtx.font = `${s.fs} var(--font-ui)`;
-                sCtx.fillText(s.char, 0, 0);
-                sCtx.restore();
-                
-                s.x += s.vx;
-                s.y += s.vy;
-                s.rot += s.rs;
-                
-                // Wrap around edges
-                if(s.x < -50) s.x = width + 50; if(s.x > width+50) s.x = -50;
-                if(s.y < -50) s.y = height + 50; if(s.y > height+50) s.y = -50;
+            // Draw Escaping Sigils
+            ctx.font = '20px serif';
+            chaosParticles.forEach(p => {
+                ctx.fillStyle = 'rgba(100, 0, 0, 0.3)';
+                ctx.fillText(p.char, p.x, p.y);
+                p.x += p.vX; p.y += p.vY;
+                if(p.x < 0 || p.x > width) p.vX *= -1;
+                if(p.y < 0 || p.y > height) p.vY *= -1;
             });
 
-            // 4. DRAW CURSOR DISTORTION TRAIL
-            cCtx.fillStyle = 'rgba(1,0,0,0.12)';
-            cCtx.fillRect(0,0,width,height);
-            cCtx.beginPath();
-            cCtx.arc(mouse.x, mouse.y, 40, 0, Math.PI*2);
-            cCtx.fillStyle = 'rgba(255,0,0,0.6)';
-            cCtx.fill();
-            cCtx.closePath();
+            // Cursor Distortion Aura
+            ctx.beginPath();
+            ctx.arc(mouse.x, mouse.y, 60, 0, Math.PI*2);
+            ctx.fillStyle = 'rgba(255, 0, 0, 0.1)';
+            ctx.fill();
 
-            requestAnimationFrame(animate);
+            requestAnimationFrame(draw);
         }
 
-        // --- MOUSE PARALLAX & CURSOR TRACKING ---
-        document.onmousemove = (e) => {
+        function descend() {
+            // Initiate Audio
+            audio.play().catch(err => console.log("Audio Wake Failed: ", err));
+            
+            // Fade Seal
+            seal.style.opacity = '0';
+            setTimeout(() => {
+                seal.style.visibility = 'hidden';
+                ui.style.opacity = '1';
+            }, 1000);
+
+            init();
+            draw();
+        }
+
+        window.addEventListener('resize', init);
+
+        document.addEventListener('mousemove', (e) => {
             mouse.x = e.clientX;
             mouse.y = e.clientY;
             
-            // Aggressive parallax movement
-            if(mask.classList.contains('unmasked')) {
-                const xParallax = (e.clientX / width - 0.5) * 60;
-                const yParallax = (e.clientY / height - 0.5) * 60;
-                document.querySelector('.viewport').style.transform = `translate(${xParallax}px, ${yParallax}px) rotateY(${xParallax/2}deg)`;
-            }
-        };
+            // Parallax for link matrix
+            const moveX = (e.clientX / width - 0.5) * 40;
+            const moveY = (e.clientY / height - 0.5) * 40;
+            document.querySelector('.link-grid').style.transform = `translate(${moveX}px, ${moveY}px)`;
+        });
 
-        console.log("%cBLOOD WIRES ACTIVE. OHDXNIS IN CONTROL. AD INFIMUM.", "color: #ff0000; font-weight: bold; font-size: 20px; background: #000; padding: 10px; border: 1px solid #600;");
+        console.log("%cWIRES AWAKENED. OHDXNIS: AD INFINITUM.", "color: #ff0000; font-weight: bold; font-size: 20px; text-shadow: 2px 2px black;");
     </script>
 </body>
 </html>
