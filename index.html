@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OHDXNIS | TOTAL CHAOS</title>
+    <title>OHDXNIS | AD INFINITUM</title>
     <style>
         :root {
-            --abyss: #000000;
-            --blood: #500000;
-            --fresh: #ff0000;
+            --bg: #1a0000;
+            --blood-neon: #ff0000;
+            --blood-pale: #ff4d4d;
             --font-ritual: 'Cinzel', serif;
         }
 
@@ -17,139 +17,155 @@
         * { margin: 0; padding: 0; box-sizing: border-box; cursor: crosshair; }
 
         body, html {
-            background-color: var(--abyss);
+            background-color: var(--bg);
             color: #fff;
             overflow: hidden;
             height: 100vh; width: 100vw;
             user-select: none;
         }
 
-        /* --- THE SACRIFICE GATE --- */
+        /* --- THE SACRIFICIAL GATE --- */
         #gate {
             position: fixed; inset: 0;
-            background: #000; z-index: 9999;
+            background: #fff; z-index: 9999;
             display: flex; align-items: center; justify-content: center;
-            transition: opacity 1s steps(4);
+            transition: opacity 0.5s steps(2);
         }
         .gate-sigil {
-            font-size: 15vw; color: var(--fresh);
-            filter: drop-shadow(0 0 50px red);
-            animation: ritual-flicker 0.1s infinite;
+            font-size: 20vw; color: #000;
+            animation: ritual-flicker 0.05s infinite;
         }
 
-        /* --- THE CHAOS ENGINE --- */
+        /* --- THE CHAOS ENGINES --- */
         canvas { position: fixed; inset: 0; pointer-events: none; }
-        #abyss { z-index: 1; filter: contrast(1.5) brightness(0.8); }
-        #blood-rain { z-index: 2; mix-blend-mode: screen; }
+        #abyss { z-index: 1; filter: saturate(2) contrast(1.5); }
+        #blood-rain { z-index: 2; mix-blend-mode: color-dodge; }
 
-        /* --- THE VIEWPORT --- */
+        /* --- THE VIEWPORT (DISPLACED) --- */
         .viewport {
             position: relative; z-index: 10;
             height: 100vh; width: 100vw;
             display: flex; flex-direction: column;
             align-items: center; justify-content: center;
             opacity: 0;
+            /* Constant high-frequency displacement */
+            filter: url(#massive-distort);
         }
 
-        /* TITLE: SLOW, HEAVY, OMINOUS */
-        .title-container {
+        /* TITLE: LIGHTER, BRIGHTER, VIOLENT */
+        .title-box {
             text-align: center;
-            margin-bottom: 8vh;
+            margin-bottom: 5vh;
             position: relative;
         }
         
         h1#ritual-title {
             font-family: 'Cinzel', serif;
-            font-size: 7vw;
-            letter-spacing: 30px;
+            font-size: 9vw;
+            letter-spacing: 20px;
             color: #fff;
             text-transform: uppercase;
-            text-shadow: 0 0 20px var(--fresh);
-            animation: slow-sway 6s infinite ease-in-out;
+            text-shadow: 10px 0px 0px rgba(255,0,0,0.8), -10px 0px 0px rgba(0,255,255,0.8);
+            animation: title-shred 0.1s infinite;
         }
 
-        /* --- THE NODES: RAZOR SHARP & STABLE --- */
+        /* --- THE NODES: RAZOR SHARP STABILITY --- */
         .node-matrix {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
+            gap: 25px;
             z-index: 100;
         }
 
         .node {
             text-decoration: none;
             display: flex; flex-direction: column; align-items: center;
-            transition: transform 0.1s;
+            transition: 0.1s;
         }
 
         .node .sigil {
-            font-size: 3.5rem;
-            color: var(--blood);
+            font-size: 4.5rem;
+            color: var(--blood-neon);
             margin-bottom: 5px;
-            /* High-speed individual jitter */
-            animation: jitter 0.2s infinite;
+            text-shadow: 0 0 20px #ff0000;
+            animation: spin-chaos 0.5s infinite linear;
         }
 
-        /* PURE WHITE STABLE LABELS */
+        /* WHITE STABLE NAMES */
         .node .label {
             color: #ffffff !important;
-            font-family: 'Courier New', monospace;
-            font-size: 0.8rem;
-            letter-spacing: 3px;
+            font-family: 'Arial Black', sans-serif;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
             text-transform: uppercase;
-            font-weight: 900;
             background: #000;
-            padding: 5px 10px;
-            border: 1px solid var(--blood);
+            padding: 8px 12px;
+            border: 2px solid #fff;
             filter: none !important;
+            box-shadow: 5px 5px 0px #ff0000;
         }
 
-        .node:hover { transform: scale(1.1); }
-        .node:hover .sigil { color: var(--fresh); animation: ritual-flicker 0.05s infinite; }
-        .node:hover .label { border-color: #fff; background: var(--blood); }
+        .node:hover { transform: scale(1.2) rotate(5deg); }
+        .node:hover .label { background: #fff; color: #000 !important; box-shadow: -5px -5px 0px #000; }
 
-        /* --- ANIMATIONS --- */
-        @keyframes ritual-flicker { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
+        /* --- SVG CHAOS FILTERS --- */
+        svg { position: absolute; width: 0; height: 0; }
+
+        @keyframes ritual-flicker { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0; transform: scale(1.1); } }
         
-        @keyframes slow-sway {
-            0%, 100% { transform: translateY(0) rotate(-1deg); }
-            50% { transform: translateY(-10px) rotate(1deg); }
+        @keyframes title-shred {
+            0% { transform: translate(2px, -2px) skewX(5deg); }
+            50% { transform: translate(-2px, 2px) skewX(-5deg); filter: invert(1); }
+            100% { transform: translate(0,0) skewX(0deg); }
         }
 
-        @keyframes jitter {
-            0% { transform: translate(0,0); }
-            50% { transform: translate(2px, -2px); }
-            100% { transform: translate(-1px, 1px); }
+        @keyframes spin-chaos {
+            from { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.5); }
+            to { transform: rotate(360deg) scale(1); }
         }
 
-        /* Random screen tear effect */
-        #glitch-overlay {
+        /* Flash Layer */
+        #strobe {
             position: fixed; inset: 0;
-            background: transparent;
-            z-index: 50; pointer-events: none;
-            animation: tear 4s infinite;
+            background: #ff0000;
+            z-index: 5; pointer-events: none;
+            opacity: 0;
+            animation: strobe-flash 4s infinite;
         }
-
-        @keyframes tear {
-            0%, 95%, 100% { box-shadow: none; }
-            96% { box-shadow: inset 0 20px 0 red, inset 0 -20px 0 red; transform: translateX(10px); }
-            98% { box-shadow: inset 20px 0 0 white; transform: translateX(-10px); }
+        @keyframes strobe-flash {
+            0%, 90% { opacity: 0; }
+            91% { opacity: 0.2; }
+            92% { opacity: 0; }
+            93% { opacity: 0.5; background: #fff; }
+            94% { opacity: 0; }
         }
 
     </style>
 </head>
-<body onclick="startRitual()">
+<body onclick="descend()">
 
     <div id="gate">
         <div class="gate-sigil">🜏</div>
     </div>
 
-    <div id="glitch-overlay"></div>
+    <div id="strobe"></div>
+
+    <svg>
+        <filter id="massive-distort">
+            <feTurbulence type="fractalNoise" baseFrequency="0.01" numOctaves="3" result="noise">
+                <animate attributeName="baseFrequency" values="0.01;0.05;0.01" dur="0.2s" repeatCount="indefinite" />
+            </feTurbulence>
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="30" />
+            <feColorMatrix type="saturate" values="2" />
+        </filter>
+    </svg>
+
     <canvas id="abyss"></canvas>
     <canvas id="blood-rain"></canvas>
 
     <div class="viewport" id="main">
-        <div class="title-container">
+        <div class="title-box">
             <h1 id="ritual-title">OHDXNIS</h1>
         </div>
 
@@ -175,7 +191,7 @@
         </div>
     </div>
 
-    <audio id="ritual-audio" loop>
+    <audio id="loop" loop>
         <source src="Bleood  type beat wires.mp3" type="audio/mpeg">
     </audio>
 
@@ -188,57 +204,58 @@
         let sigils = [];
         let drops = [];
 
-        const occultChars = ['⛧','🜏','⸸','𖤐','✕','🜓','🜕','🜔','🜍','🜚','🜛','🜜','🜝','🜞','🜟','🜠','🜡','🜢','🜣','🜤','🜥','🜦','🜧','🜨','🜨'];
+        const chars = ['⛧','🜏','⸸','𖤐','✕','🜓','🜕','🜔','🜍','🜚','🜛','🜜','🜝','🜞','🜟','🜠','🜡','🜢','🜣','🜤','🜥','🜦','🜧','🜨'];
 
         function init() {
             w = abyss.width = rain.width = window.innerWidth;
             h = abyss.height = rain.height = window.innerHeight;
             sigils = [];
-            // MASSIVE SIGIL COUNT
-            for(let i=0; i<400; i++) {
+            // MASSIVE SYMBOLIC CHAOS
+            for(let i=0; i<600; i++) {
                 sigils.push({
                     x: Math.random() * w,
                     y: Math.random() * h,
-                    s: Math.random() * 30 + 10,
-                    char: occultChars[Math.floor(Math.random() * occultChars.length)],
-                    vR: (Math.random() - 0.5) * 0.1,
+                    s: Math.random() * 50 + 10,
+                    char: chars[Math.floor(Math.random() * chars.length)],
+                    vR: (Math.random() - 0.5) * 0.5,
                     angle: Math.random() * Math.PI * 2,
-                    o: Math.random() * 0.5
+                    color: Math.random() > 0.5 ? '#ff0000' : '#ffffff'
                 });
             }
         }
 
-        function createDrop() {
+        function spawnDrop() {
             drops.push({
                 x: Math.random() * w,
-                y: -50,
-                vY: Math.random() * 20 + 10,
-                l: Math.random() * 40 + 20,
-                w: Math.random() * 3 + 1
+                y: -100,
+                vY: Math.random() * 30 + 10,
+                l: Math.random() * 100 + 50,
+                w: Math.random() * 5 + 2
             });
         }
 
         function draw() {
-            // Abyss Trail
-            aCtx.fillStyle = 'rgba(0, 0, 0, 0.15)';
+            // White/Red Feedback smear
+            aCtx.fillStyle = frame % 10 === 0 ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.2)';
             aCtx.fillRect(0, 0, w, h);
 
             sigils.forEach(s => {
                 aCtx.save();
                 aCtx.translate(s.x, s.y);
                 aCtx.rotate(s.angle);
-                aCtx.fillStyle = `rgba(150, 0, 0, ${s.o})`;
-                aCtx.font = `${s.s}px serif`;
+                aCtx.fillStyle = s.color;
+                aCtx.font = `bold ${s.s}px serif`;
                 aCtx.fillText(s.char, 0, 0);
                 aCtx.restore();
                 
                 s.angle += s.vR;
-                if(Math.random() > 0.99) s.char = occultChars[Math.floor(Math.random() * occultChars.length)];
+                s.y += Math.sin(frame * 0.1) * 5;
+                if(Math.random() > 0.98) s.char = chars[Math.floor(Math.random() * chars.length)];
             });
 
-            // Blood Rain
+            // Gory Rain
             rCtx.clearRect(0, 0, w, h);
-            rCtx.strokeStyle = 'rgba(255, 0, 0, 0.6)';
+            rCtx.strokeStyle = '#ff0000';
             drops.forEach((d, i) => {
                 rCtx.lineWidth = d.w;
                 rCtx.beginPath();
@@ -249,14 +266,14 @@
                 if(d.y > h) drops.splice(i, 1);
             });
 
-            if(drops.length < 100) createDrop();
+            if(drops.length < 150) spawnDrop();
 
             frame++;
             requestAnimationFrame(draw);
         }
 
-        function startRitual() {
-            document.getElementById('ritual-audio').play().catch(()=>{});
+        function descend() {
+            document.getElementById('loop').play().catch(()=>{});
             document.getElementById('gate').style.opacity = '0';
             setTimeout(() => {
                 document.getElementById('gate').style.display = 'none';
