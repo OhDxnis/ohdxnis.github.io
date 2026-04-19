@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OHDXNIS | HELLSCAPE</title>
+    <title>OHDXNIS | DIGITAL RITUAL</title>
     <style>
         :root {
-            --bg-deep: #030000;
-            --blood: #7a0000;
-            --dark-blood: #2a0000;
-            --glitch-grey: #888888;
+            --bg-deep: #020000;
+            --blood: #8b0000;
+            --dark-blood: #3a0000;
+            --glitch-grey: #999999;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; cursor: crosshair; }
@@ -31,36 +31,35 @@
             top: 0; left: 0;
             width: 100%; height: 100%;
             background: url('https://upload.wikimedia.org/wikipedia/commons/7/76/1k_Resolution_White_Noise_Video_Frame.png');
-            opacity: 0.05;
+            opacity: 0.07;
             pointer-events: none;
             z-index: 999;
             mix-blend-mode: overlay;
-            animation: noise 0.15s infinite;
+            animation: noise 0.1s infinite;
         }
 
-        .blood-pool {
+        .blood-pulse {
             position: fixed;
             top: 0; left: 0;
             width: 100%; height: 100%;
-            background: radial-gradient(circle at center, var(--dark-blood) 0%, transparent 80%);
-            opacity: 0.6;
+            background: radial-gradient(circle at center, var(--dark-blood) 0%, transparent 85%);
+            opacity: 0.7;
             z-index: 1;
-            animation: pulse-blood 6s infinite alternate;
+            animation: pulse-blood 4s infinite alternate ease-in-out;
         }
 
-        /* --- OCCULT SYMBOLISM --- */
+        /* --- SYMBOLIC DENSITY --- */
 
         .giant-sigil {
             position: absolute;
             top: 50%; left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 80vh;
+            font-size: 90vh;
             color: var(--blood);
-            opacity: 0.03;
+            opacity: 0.04;
             z-index: 2;
             pointer-events: none;
-            animation: slow-spin 60s linear infinite;
-            user-select: none;
+            animation: slow-spin 80s linear infinite;
         }
 
         .floating-symbols {
@@ -68,9 +67,6 @@
             width: 100%; height: 100%;
             z-index: 3;
             pointer-events: none;
-            font-size: 2rem;
-            color: var(--dark-blood);
-            opacity: 0.3;
         }
 
         /* --- MAIN IDENTITY --- */
@@ -84,101 +80,99 @@
             justify-content: center;
             height: 100vh;
             text-align: center;
+            padding: 20px;
         }
 
         h1 {
-            font-size: 10vw;
+            font-size: 11vw;
             font-weight: 900;
             color: #fff;
-            letter-spacing: 0.1em;
-            text-shadow: 4px 0px var(--blood), -4px 0px #000;
+            letter-spacing: -0.05em;
+            text-shadow: 5px 0px var(--blood), -3px 0px #000;
             filter: url(#glitch);
-            animation: aggressive-flicker 3s infinite;
-            user-select: none;
+            animation: aggressive-flicker 2s infinite;
         }
 
         .subtitle {
-            font-size: 1rem;
-            margin-top: -10px;
+            font-size: 1.2rem;
+            margin-top: -15px;
             color: var(--blood);
-            letter-spacing: 0.3em;
-            text-shadow: 0px 0px 10px var(--blood);
-        }
-
-        /* --- LINK MATRIX --- */
-        
-        .link-matrix {
-            margin-top: 50px;
-            display: flex;
-            gap: 30px;
-            flex-wrap: wrap;
-            justify-content: center;
-            z-index: 20;
-            background: rgba(0,0,0,0.4);
-            padding: 10px 20px;
-            border: 1px solid var(--dark-blood);
-            box-shadow: inset 0 0 20px rgba(122, 0, 0, 0.2);
-        }
-
-        .link-matrix a {
-            color: #555;
-            text-decoration: none;
-            font-size: 0.9rem;
+            letter-spacing: 0.5em;
+            text-shadow: 0px 0px 15px var(--blood);
             font-weight: bold;
-            position: relative;
+        }
+
+        /* --- THE LINK MATRIX --- */
+        
+        .link-grid {
+            margin-top: 40px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            z-index: 20;
+            max-width: 800px;
+        }
+
+        @media (max-width: 600px) { .link-grid { grid-template-columns: repeat(2, 1fr); } }
+
+        .ritual-link {
+            color: #777;
+            text-decoration: none;
+            font-size: 0.75rem;
+            font-weight: bold;
+            padding: 10px;
+            border: 1px solid rgba(139, 0, 0, 0.2);
+            background: rgba(0,0,0,0.6);
             transition: all 0.1s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
-        .link-matrix a:hover {
+        .ritual-link span { font-size: 1.5rem; margin-bottom: 5px; color: var(--blood); }
+
+        .ritual-link:hover {
             color: #fff;
-            text-shadow: 2px 2px var(--blood), -2px -2px #000;
-            letter-spacing: 0.1em;
+            background: var(--dark-blood);
+            border: 1px solid var(--blood);
+            transform: scale(1.1) rotate(1deg);
+            text-shadow: 0 0 10px #fff;
         }
 
-        /* --- INTEGRATED MEDIA --- */
+        /* --- MEDIA INTEGRATION --- */
 
         .media-shrine {
-            margin-top: 40px;
-            width: 300px;
-            filter: sepia(1) hue-rotate(320deg) saturate(5) contrast(1.5) opacity(0.4);
-            transition: filter 0.3s, opacity 0.3s;
+            margin-top: 30px;
+            width: 350px;
+            filter: invert(1) contrast(2) opacity(0.3);
             z-index: 20;
-        }
-
-        .media-shrine:hover {
-            opacity: 1;
-            filter: sepia(1) hue-rotate(320deg) saturate(2) contrast(1.2);
         }
 
         /* --- ANIMATIONS --- */
 
         @keyframes noise {
             0% { transform: translate(0,0) }
-            10% { transform: translate(-2%,-2%) }
-            20% { transform: translate(-4%,2%) }
-            50% { transform: translate(2%,-4%) }
-            100% { transform: translate(0,0) }
+            50% { transform: translate(-3%, 3%) }
+            100% { transform: translate(1%, -1%) }
         }
 
         @keyframes pulse-blood {
-            0% { opacity: 0.3; transform: scale(1); }
-            100% { opacity: 0.7; transform: scale(1.05); }
+            0% { opacity: 0.4; transform: scale(1); }
+            100% { opacity: 0.8; transform: scale(1.1); }
         }
 
         @keyframes slow-spin {
             from { transform: translate(-50%, -50%) rotate(0deg); }
-            to { transform: translate(-50%, -50%) rotate(360deg); }
+            to { transform: translate(-50%, -50%) rotate(-360deg); }
         }
 
         @keyframes aggressive-flicker {
-            0%, 100% { opacity: 1; transform: skew(0deg); }
-            5% { opacity: 0.8; transform: skew(-5deg); }
-            10% { opacity: 1; transform: skew(0deg); }
-            15% { opacity: 0.2; transform: skew(10deg); }
-            20% { opacity: 1; transform: skew(0deg); }
-            80% { opacity: 1; }
-            82% { opacity: 0.5; }
-            84% { opacity: 1; }
+            0% { opacity: 1; filter: contrast(1); }
+            2% { opacity: 0.3; filter: contrast(5); }
+            4% { opacity: 1; }
+            70% { opacity: 1; transform: scale(1); }
+            71% { transform: scale(1.05) skewX(10deg); }
+            72% { transform: scale(1); skewX(0deg); }
         }
 
     </style>
@@ -187,32 +181,34 @@
 
     <svg style="position: absolute; width: 0; height: 0;">
         <filter id="glitch">
-            <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="3" result="noise" />
-            <feDisplacementMap in="SourceGraphic" in2="noise" scale="15" />
+            <feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="4" result="noise" />
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="20" />
         </filter>
     </svg>
 
     <div id="vhs-grain"></div>
-    <div class="blood-pool"></div>
-    
-    <div class="giant-sigil">⛧</div>
-
+    <div class="blood-pulse"></div>
+    <div class="giant-sigil">🜏</div>
     <div class="floating-symbols" id="symbols-container"></div>
 
     <div class="center-container">
         <h1 id="main-title">OHDXNIS</h1>
-        <p class="subtitle">⸸ NO SALVATION ⸸</p>
+        <p class="subtitle">⸸ AD INFIMUM ⸸</p>
 
-        <div class="link-matrix">
-            <a href="#" target="_blank">🜏 SPOTIFY</a>
-            <a href="#" target="_blank">🜏 APPLE MUSIC</a>
-            <a href="#" target="_blank">🜏 SOUNDCLOUD</a>
-            <a href="#" target="_blank">🜏 INSTAGRAM</a>
-            <a href="#" target="_blank">🜏 TWITTER</a>
+        <div class="link-grid">
+            <a href="https://it.wikipedia.org/wiki/Utente:Denis.Gjoka00/Sandbox" target="_blank" class="ritual-link"><span>🜏</span>WIKIPEDIA</a>
+            <a href="https://genius.com/artists/Ohdxnis" target="_blank" class="ritual-link"><span>𖤐</span>GENIUS</a>
+            <a href="https://www.youtube.com/@OhDxnis" target="_blank" class="ritual-link"><span>⸸</span>YOUTUBE</a>
+            <a href="https://ohdxnis.fandom.com/wiki/OhDxnis!_Wiki" target="_blank" class="ritual-link"><span>⛧</span>WIKI FANDOM</a>
+            <a href="https://www.tiktok.com/@nerd.alt" target="_blank" class="ritual-link"><span>🜔</span>TIKTOK</a>
+            <a href="https://www.instagram.com/denis.gjoka_/" target="_blank" class="ritual-link"><span>🜏</span>INSTAGRAM</a>
+            <a href="https://soundcloud.com/ohdxnis" target="_blank" class="ritual-link"><span>🜍</span>SOUNDCLOUD</a>
+            <a href="https://open.spotify.com/artist/4U3Ylg19PV91nwShOuFFGR" target="_blank" class="ritual-link"><span>🜕</span>SPOTIFY ARTIST</a>
+            <a href="https://open.spotify.com/show/6XWs4fWUVKMWPl3Vl8ejFx" target="_blank" class="ritual-link"><span>🜓</span>MIXTAPE (PODCAST)</a>
         </div>
 
         <div class="media-shrine">
-            <iframe width="100%" height="20" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/123456789&color=%237a0000&inverse=true&auto_play=false&show_user=false"></iframe>
+            <iframe width="100%" height="20" scrolling="no" frameborder="no" allow="autoplay" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/123456789&color=%238b0000&inverse=true&auto_play=false&show_user=false"></iframe>
         </div>
     </div>
 
@@ -222,58 +218,51 @@
 
     <script>
         const audio = document.getElementById('bg-audio');
-        const title = document.getElementById('main-title');
         const symbolContainer = document.getElementById('symbols-container');
 
-        // AUDIO FIX: Tries to play immediately. If blocked, waits for ANY click on the screen to force it on.
-        audio.volume = 0.6;
-        let playPromise = audio.play();
-        if (playPromise !== undefined) {
-            playPromise.catch(() => {
-                document.body.addEventListener('click', () => {
-                    if(audio.paused) audio.play();
-                }, { once: true });
-            });
-        }
-
-        // MOUSE PARALLAX WARPING
-        document.addEventListener('mousemove', (e) => {
-            const x = (e.clientX / window.innerWidth) - 0.5;
-            const y = (e.clientY / window.innerHeight) - 0.5;
-            
-            if (Math.random() > 0.90) {
-                title.style.transform = `translate(${x * 15}px, ${y * 15}px) skew(${x * 8}deg)`;
+        // Audio Activation: Still requires one click anywhere to bypass browser security
+        document.body.addEventListener('click', () => {
+            if(audio.paused) {
+                audio.volume = 0.7;
+                audio.play();
             }
-        });
+        }, { once: false });
 
-        // GLITCH INJECTION
-        setInterval(() => {
-            const filter = document.querySelector('#glitch feTurbulence');
-            filter.setAttribute('baseFrequency', `${Math.random() * 0.08}`);
-            
-            if(Math.random() > 0.95) {
-                title.style.letterSpacing = (Math.random() * 15) + 'px';
-                setTimeout(() => title.style.letterSpacing = '0.1em', 100);
-            }
-        }, 80);
-
-        // RANDOM SCATTERED OCCULT SYMBOLS
-        const satanicSymbols = ['⛧', '🜏', '⸸', '†', '𖤐'];
+        // Heavy Symbol Scattering
+        const occultSymbols = ['⛧', '🜏', '⸸', '†', '𖤐', '🜓', '🜕', '🜔', '🜍', '🜎', '🜏'];
         
-        for(let i = 0; i < 15; i++) {
+        for(let i = 0; i < 40; i++) {
             let sym = document.createElement('div');
-            sym.innerText = satanicSymbols[Math.floor(Math.random() * satanicSymbols.length)];
+            sym.innerText = occultSymbols[Math.floor(Math.random() * occultSymbols.length)];
             sym.style.position = 'absolute';
             sym.style.left = Math.random() * 100 + 'vw';
             sym.style.top = Math.random() * 100 + 'vh';
-            sym.style.fontSize = (Math.random() * 2 + 1) + 'rem';
-            sym.style.opacity = Math.random() * 0.5;
+            sym.style.fontSize = (Math.random() * 3 + 0.5) + 'rem';
+            sym.style.opacity = Math.random() * 0.4;
+            sym.style.color = Math.random() > 0.5 ? '#4a0000' : '#222';
             sym.style.transform = `rotate(${Math.random() * 360}deg)`;
-            sym.style.filter = 'blur(1px)';
+            sym.style.filter = `blur(${Math.random() * 3}px)`;
+            
+            // Random floating motion
+            sym.animate([
+                { transform: `translate(0, 0) rotate(0deg)` },
+                { transform: `translate(${Math.random()*40-20}px, ${Math.random()*40-20}px) rotate(360deg)` }
+            ], {
+                duration: 5000 + Math.random() * 5000,
+                iterations: Infinity,
+                direction: 'alternate'
+            });
+
             symbolContainer.appendChild(sym);
         }
 
-        console.log("%cBLOOD PACT SEALED", "color: #7a0000; font-size: 24px; font-weight: bold; background: #000; padding: 10px;");
+        // Mouse Parallax for Links
+        document.addEventListener('mousemove', (e) => {
+            const x = (e.clientX / window.innerWidth - 0.5) * 20;
+            const y = (e.clientY / window.innerHeight - 0.5) * 20;
+            document.querySelector('.link-grid').style.transform = `translate(${x}px, ${y}px)`;
+        });
+
     </script>
 </body>
 </html>
