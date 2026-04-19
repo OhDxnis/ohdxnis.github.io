@@ -5,149 +5,121 @@
 <title>OHDXNIS</title>
 
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap');
+
 html,body{
   margin:0;
   padding:0;
   height:100%;
   overflow:hidden;
-  font-family:Arial;
+  font-family:Inter, sans-serif;
+  background:#050505;
   color:white;
-  background:#111;
 }
 
-/* STRONG animated background */
+/* MOVING LIGHT FIELD BACKGROUND */
 body{
-  background: linear-gradient(120deg, #ff003c, #0011ff, #000000);
-  background-size: 600% 600%;
-  animation: bg 10s ease infinite;
+  background: radial-gradient(circle at 10% 20%, #ff003c22, transparent 40%),
+              radial-gradient(circle at 80% 70%, #0033ff22, transparent 45%),
+              radial-gradient(circle at 50% 50%, #ffffff10, transparent 60%);
+  animation:bgmove 10s ease-in-out infinite alternate;
 }
 
-@keyframes bg{
-  0%{background-position:0% 50%;}
-  50%{background-position:100% 50%;}
-  100%{background-position:0% 50%;}
+@keyframes bgmove{
+  0%{filter:blur(0px) brightness(1);}
+  100%{filter:blur(2px) brightness(1.2);}
 }
 
-canvas{
+/* NOISE TEXTURE */
+.noise{
   position:fixed;
-  top:0;
-  left:0;
+  inset:0;
+  background-image:url("https://grainy-gradients.vercel.app/noise.svg");
+  opacity:0.06;
+  pointer-events:none;
 }
 
-#ui{
-  position:fixed;
-  top:40px;
-  left:40px;
+/* MAIN LAYOUT */
+.container{
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
 }
 
+/* NAME */
 h1{
-  font-size:60px;
+  font-size:90px;
+  letter-spacing:12px;
   margin:0;
+  font-weight:700;
+  transition:0.25s;
+}
+
+h1:hover{
+  transform:skew(-6deg) scale(1.02);
+}
+
+/* SUBTEXT */
+p{
+  opacity:0.5;
+  margin-top:10px;
+  letter-spacing:2px;
+}
+
+/* LINKS */
+.links{
+  margin-top:25px;
+  display:flex;
+  gap:30px;
 }
 
 a{
-  display:block;
   color:white;
-  margin-top:10px;
-  opacity:0.8;
   text-decoration:none;
+  opacity:0.6;
+  transition:0.2s;
+  letter-spacing:2px;
 }
 
-a:hover{opacity:1;}
+a:hover{
+  opacity:1;
+  transform:translateY(-2px);
+}
 
-#start{
-  position:fixed;
-  inset:0;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  background:black;
-  z-index:10;
-  cursor:pointer;
-  font-size:20px;
-  letter-spacing:4px;
+/* SOUND CLOUD */
+iframe{
+  margin-top:40px;
+  filter:contrast(1.1);
 }
 </style>
 </head>
 
 <body>
 
-<div id="start">CLICK TO START</div>
+<div class="noise"></div>
 
-<div id="ui">
+<div class="container">
+
   <h1>OHDXNIS</h1>
-  <a href="https://instagram.com/denis.gjoka_/" target="_blank">Instagram</a>
-  <a href="https://youtube.com/@OhDxnis" target="_blank">YouTube</a>
-  <a href="https://soundcloud.com/ohdxnis" target="_blank">SoundCloud</a>
+
+  <p>albanian artist</p>
+
+  <div class="links">
+    <a href="https://instagram.com/denis.gjoka_/" target="_blank">INSTAGRAM</a>
+    <a href="https://youtube.com/@OhDxnis" target="_blank">YOUTUBE</a>
+    <a href="https://soundcloud.com/ohdxnis" target="_blank">SOUNDCLOUD</a>
+  </div>
+
+  <iframe width="360" height="120" scrolling="no"
+  frameborder="no"
+  allow="autoplay"
+  src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/ohdxnis&color=%23000000">
+  </iframe>
+
 </div>
-
-<canvas id="c"></canvas>
-
-<script>
-const c = document.getElementById("c");
-const ctx = c.getContext("2d");
-
-c.width = innerWidth;
-c.height = innerHeight;
-
-let particles = [];
-
-for(let i=0;i<200;i++){
-  particles.push({
-    x:Math.random()*c.width,
-    y:Math.random()*c.height,
-    vx:(Math.random()-0.5)*2,
-    vy:(Math.random()-0.5)*2
-  });
-}
-
-let mouse={x:0,y:0};
-
-addEventListener("mousemove",e=>{
-  mouse.x=e.clientX;
-  mouse.y=e.clientY;
-});
-
-function draw(){
-  ctx.fillStyle="rgba(0,0,0,0.2)";
-  ctx.fillRect(0,0,c.width,c.height);
-
-  for(let p of particles){
-
-    let dx=p.x-mouse.x;
-    let dy=p.y-mouse.y;
-    let dist=Math.sqrt(dx*dx+dy*dy);
-
-    if(dist<150){
-      p.x+=dx*0.01;
-      p.y+=dy*0.01;
-    }
-
-    p.x+=p.vx;
-    p.y+=p.vy;
-
-    if(p.x<0||p.x>c.width)p.vx*=-1;
-    if(p.y<0||p.y>c.height)p.vy*=-1;
-
-    ctx.fillStyle="white";
-    ctx.fillRect(p.x,p.y,3,3);
-  }
-
-  requestAnimationFrame(draw);
-}
-draw();
-
-/* AUDIO FIX */
-let audio = new Audio("New_Project (45).mp3"); // PUT YOUR FILE HERE
-audio.loop = true;
-audio.volume = 0.8;
-
-document.getElementById("start").onclick = async () => {
-  document.getElementById("start").style.display="none";
-
-  audio.play();
-};
-</script>
 
 </body>
 </html>
