@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OHDXNIS | AD INFINITUM</title>
+    <title>OHDXNIS | TOTAL CHAOS</title>
     <style>
         :root {
-            --void: #000000;
-            --blood: #600000;
-            --flesh: #ff0000;
+            --abyss: #000000;
+            --blood: #500000;
+            --fresh: #ff0000;
             --font-ritual: 'Cinzel', serif;
         }
 
@@ -17,30 +17,30 @@
         * { margin: 0; padding: 0; box-sizing: border-box; cursor: crosshair; }
 
         body, html {
-            background-color: var(--void);
+            background-color: var(--abyss);
             color: #fff;
             overflow: hidden;
             height: 100vh; width: 100vw;
             user-select: none;
         }
 
-        /* --- THE SACRIFICIAL GATE --- */
+        /* --- THE SACRIFICE GATE --- */
         #gate {
             position: fixed; inset: 0;
             background: #000; z-index: 9999;
             display: flex; align-items: center; justify-content: center;
-            transition: opacity 1.5s cubic-bezier(1,0,0,1);
+            transition: opacity 1s steps(4);
         }
         .gate-sigil {
-            font-size: 10vw; color: var(--flesh);
-            filter: drop-shadow(0 0 30px var(--blood));
-            animation: breathe 1s infinite alternate;
+            font-size: 15vw; color: var(--fresh);
+            filter: drop-shadow(0 0 50px red);
+            animation: ritual-flicker 0.1s infinite;
         }
 
-        /* --- THE GORE ENGINE --- */
+        /* --- THE CHAOS ENGINE --- */
         canvas { position: fixed; inset: 0; pointer-events: none; }
-        #abyss { z-index: 1; } /* Sigil Swarm */
-        #dripping { z-index: 2; } /* Real-time Blood Drips */
+        #abyss { z-index: 1; filter: contrast(1.5) brightness(0.8); }
+        #blood-rain { z-index: 2; mix-blend-mode: screen; }
 
         /* --- THE VIEWPORT --- */
         .viewport {
@@ -49,117 +49,107 @@
             display: flex; flex-direction: column;
             align-items: center; justify-content: center;
             opacity: 0;
-            transition: opacity 2s ease;
         }
 
-        /* TITLE: SLOW MOTION, HEAVY CHAOS BEHIND */
-        .title-aura {
-            position: relative;
-            padding: 40px;
+        /* TITLE: SLOW, HEAVY, OMINOUS */
+        .title-container {
             text-align: center;
-            margin-bottom: 5vh;
+            margin-bottom: 8vh;
+            position: relative;
         }
         
-        /* THE CHAOS BEHIND THE TITLE */
-        .title-aura::before {
-            content: ''; position: absolute; inset: 0;
-            background: radial-gradient(circle, var(--blood) 0%, transparent 70%);
-            filter: url(#chaos-noise);
-            z-index: -1;
-            animation: rotate-chaos 5s infinite linear;
-        }
-
         h1#ritual-title {
             font-family: 'Cinzel', serif;
             font-size: 7vw;
-            letter-spacing: 25px;
+            letter-spacing: 30px;
             color: #fff;
             text-transform: uppercase;
-            text-shadow: 0 0 15px var(--flesh);
-            /* SLOWER MOTION */
-            animation: slow-throb 4s infinite ease-in-out;
+            text-shadow: 0 0 20px var(--fresh);
+            animation: slow-sway 6s infinite ease-in-out;
         }
 
-        /* --- THE NODES: ZERO DISTORTION --- */
+        /* --- THE NODES: RAZOR SHARP & STABLE --- */
         .node-matrix {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 40px;
+            gap: 30px;
             z-index: 100;
         }
 
         .node {
             text-decoration: none;
             display: flex; flex-direction: column; align-items: center;
-            transition: 0.2s;
+            transition: transform 0.1s;
         }
 
         .node .sigil {
             font-size: 3.5rem;
             color: var(--blood);
-            margin-bottom: 10px;
-            filter: url(#heavy-glitch); /* Only the sigil distorts */
+            margin-bottom: 5px;
+            /* High-speed individual jitter */
+            animation: jitter 0.2s infinite;
         }
 
-        /* RAZOR SHARP WHITE NAMES - NO EFFECTS */
+        /* PURE WHITE STABLE LABELS */
         .node .label {
             color: #ffffff !important;
             font-family: 'Courier New', monospace;
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             letter-spacing: 3px;
             text-transform: uppercase;
             font-weight: 900;
-            text-shadow: 2px 2px 0px #000;
-            filter: none !important; /* Critical: Strips all SVG distortion */
-            background: rgba(0,0,0,0.8);
-            padding: 4px 8px;
+            background: #000;
+            padding: 5px 10px;
+            border: 1px solid var(--blood);
+            filter: none !important;
         }
 
-        .node:hover { transform: scale(1.2) translateY(-10px); }
-        .node:hover .sigil { color: var(--flesh); filter: none; }
-        .node:hover .label { background: var(--flesh); color: #000 !important; }
+        .node:hover { transform: scale(1.1); }
+        .node:hover .sigil { color: var(--fresh); animation: ritual-flicker 0.05s infinite; }
+        .node:hover .label { border-color: #fff; background: var(--blood); }
 
-        /* --- SVG FILTERS --- */
-        svg { position: absolute; width: 0; height: 0; }
-
-        @keyframes breathe { from { opacity: 0.1; } to { opacity: 1; } }
+        /* --- ANIMATIONS --- */
+        @keyframes ritual-flicker { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
         
-        @keyframes slow-throb {
-            0%, 100% { transform: scale(1) skewX(0deg); opacity: 1; }
-            50% { transform: scale(1.05) skewX(2deg); opacity: 0.8; }
+        @keyframes slow-sway {
+            0%, 100% { transform: translateY(0) rotate(-1deg); }
+            50% { transform: translateY(-10px) rotate(1deg); }
         }
 
-        @keyframes rotate-chaos {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+        @keyframes jitter {
+            0% { transform: translate(0,0); }
+            50% { transform: translate(2px, -2px); }
+            100% { transform: translate(-1px, 1px); }
+        }
+
+        /* Random screen tear effect */
+        #glitch-overlay {
+            position: fixed; inset: 0;
+            background: transparent;
+            z-index: 50; pointer-events: none;
+            animation: tear 4s infinite;
+        }
+
+        @keyframes tear {
+            0%, 95%, 100% { box-shadow: none; }
+            96% { box-shadow: inset 0 20px 0 red, inset 0 -20px 0 red; transform: translateX(10px); }
+            98% { box-shadow: inset 20px 0 0 white; transform: translateX(-10px); }
         }
 
     </style>
 </head>
-<body onclick="awaken()">
+<body onclick="startRitual()">
 
     <div id="gate">
         <div class="gate-sigil">🜏</div>
     </div>
 
-    <svg>
-        <filter id="heavy-glitch">
-            <feTurbulence type="fractalNoise" baseFrequency="0.1" numOctaves="1" result="noise">
-                <animate attributeName="baseFrequency" values="0.1;0.5;0.1" dur="0.1s" repeatCount="indefinite" />
-            </feTurbulence>
-            <feDisplacementMap in="SourceGraphic" in2="noise" scale="15" />
-        </filter>
-        <filter id="chaos-noise">
-            <feTurbulence type="fractalNoise" baseFrequency="0.01" numOctaves="5" />
-            <feColorMatrix values="1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0" />
-        </filter>
-    </svg>
-
+    <div id="glitch-overlay"></div>
     <canvas id="abyss"></canvas>
-    <canvas id="dripping"></canvas>
+    <canvas id="blood-rain"></canvas>
 
     <div class="viewport" id="main">
-        <div class="title-aura">
+        <div class="title-container">
             <h1 id="ritual-title">OHDXNIS</h1>
         </div>
 
@@ -185,91 +175,94 @@
         </div>
     </div>
 
-    <audio id="audio" loop>
+    <audio id="ritual-audio" loop>
         <source src="Bleood  type beat wires.mp3" type="audio/mpeg">
     </audio>
 
     <script>
         const abyss = document.getElementById('abyss');
-        const drips = document.getElementById('dripping');
+        const rain = document.getElementById('blood-rain');
         const aCtx = abyss.getContext('2d');
-        const dCtx = drips.getContext('2d');
+        const rCtx = rain.getContext('2d');
         let w, h, frame = 0;
-        let particles = [];
-        let bloodDrops = [];
+        let sigils = [];
+        let drops = [];
+
+        const occultChars = ['⛧','🜏','⸸','𖤐','✕','🜓','🜕','🜔','🜍','🜚','🜛','🜜','🜝','🜞','🜟','🜠','🜡','🜢','🜣','🜤','🜥','🜦','🜧','🜨','🜨'];
 
         function init() {
-            w = abyss.width = drips.width = window.innerWidth;
-            h = abyss.height = drips.height = window.innerHeight;
-            particles = [];
-            for(let i=0; i<600; i++) {
-                particles.push({
+            w = abyss.width = rain.width = window.innerWidth;
+            h = abyss.height = rain.height = window.innerHeight;
+            sigils = [];
+            // MASSIVE SIGIL COUNT
+            for(let i=0; i<400; i++) {
+                sigils.push({
                     x: Math.random() * w,
                     y: Math.random() * h,
-                    s: Math.random() * 2 + 1,
-                    vY: Math.random() * 15 + 5,
-                    char: ['⛧', '🜏', '⸸', '𖤐'][Math.floor(Math.random()*4)]
+                    s: Math.random() * 30 + 10,
+                    char: occultChars[Math.floor(Math.random() * occultChars.length)],
+                    vR: (Math.random() - 0.5) * 0.1,
+                    angle: Math.random() * Math.PI * 2,
+                    o: Math.random() * 0.5
                 });
             }
         }
 
-        function createDrip() {
-            bloodDrops.push({
+        function createDrop() {
+            drops.push({
                 x: Math.random() * w,
-                y: -20,
-                vY: Math.random() * 4 + 2,
-                length: Math.random() * 150 + 50,
-                opacity: Math.random() * 0.8 + 0.2
+                y: -50,
+                vY: Math.random() * 20 + 10,
+                l: Math.random() * 40 + 20,
+                w: Math.random() * 3 + 1
             });
         }
 
         function draw() {
-            // Abyss smear
-            aCtx.fillStyle = 'rgba(0,0,0,0.1)';
-            aCtx.fillRect(0,0,w,h);
-            
-            particles.forEach(p => {
-                aCtx.fillStyle = 'rgba(100, 0, 0, 0.4)';
-                aCtx.font = `${p.s * 10}px serif`;
-                aCtx.fillText(p.char, p.x, p.y);
-                p.y += p.vY;
-                if(p.y > h) p.y = -20;
-            });
+            // Abyss Trail
+            aCtx.fillStyle = 'rgba(0, 0, 0, 0.15)';
+            aCtx.fillRect(0, 0, w, h);
 
-            // Actual Drips
-            dCtx.clearRect(0,0,w,h);
-            bloodDrops.forEach((d, i) => {
-                dCtx.strokeStyle = `rgba(255, 0, 0, ${d.opacity})`;
-                dCtx.lineWidth = 2;
-                dCtx.beginPath();
-                dCtx.moveTo(d.x, d.y);
-                dCtx.lineTo(d.x, d.y + d.length);
-                dCtx.stroke();
+            sigils.forEach(s => {
+                aCtx.save();
+                aCtx.translate(s.x, s.y);
+                aCtx.rotate(s.angle);
+                aCtx.fillStyle = `rgba(150, 0, 0, ${s.o})`;
+                aCtx.font = `${s.s}px serif`;
+                aCtx.fillText(s.char, 0, 0);
+                aCtx.restore();
                 
-                // Head of the drip
-                dCtx.fillStyle = '#f00';
-                dCtx.beginPath();
-                dCtx.arc(d.x, d.y + d.length, 3, 0, Math.PI*2);
-                dCtx.fill();
-
-                d.y += d.vY;
-                if(d.y > h) bloodDrops.splice(i, 1);
+                s.angle += s.vR;
+                if(Math.random() > 0.99) s.char = occultChars[Math.floor(Math.random() * occultChars.length)];
             });
 
-            if(Math.random() > 0.9) createDrip();
+            // Blood Rain
+            rCtx.clearRect(0, 0, w, h);
+            rCtx.strokeStyle = 'rgba(255, 0, 0, 0.6)';
+            drops.forEach((d, i) => {
+                rCtx.lineWidth = d.w;
+                rCtx.beginPath();
+                rCtx.moveTo(d.x, d.y);
+                rCtx.lineTo(d.x, d.y + d.l);
+                rCtx.stroke();
+                d.y += d.vY;
+                if(d.y > h) drops.splice(i, 1);
+            });
+
+            if(drops.length < 100) createDrop();
 
             frame++;
             requestAnimationFrame(draw);
         }
 
-        function awaken() {
-            document.getElementById('audio').play().catch(e => {});
+        function startRitual() {
+            document.getElementById('ritual-audio').play().catch(()=>{});
             document.getElementById('gate').style.opacity = '0';
             setTimeout(() => {
                 document.getElementById('gate').style.display = 'none';
                 document.getElementById('main').style.opacity = '1';
                 draw();
-            }, 1000);
+            }, 500);
             init();
         }
 
